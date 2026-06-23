@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>СК-ТУ — Дашборд рекламы</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #f8f9fc;
+            --card: #ffffff;
+            --border: #e2e4ea;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --accent: #6366f1;
+            --green: #16a34a;
+            --red: #dc2626;
+            --yellow: #ca8a04;
+            --blue: #2563eb;
+            --purple: #9333ea;
+            --orange: #ea580c;
+            --cyan: #0891b2;
+        }
+        [data-theme="dark"] {
+            --bg: #0f1117;
+            --card: #1a1d27;
+            --border: #2a2d3a;
+            --text: #e4e4e7;
+            --muted: #71717a;
+            --accent: #6366f1;
+            --green: #22c55e;
+            --red: #ef4444;
+            --yellow: #eab308;
+            --blue: #3b82f6;
+            --purple: #a855f7;
+            --orange: #f97316;
+            --cyan: #06b6d4;
+        }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            padding: 24px;
+            min-height: 100vh;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text);
+        }
+        [data-theme="dark"] .header h1 {
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .theme-toggle {
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--card);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .theme-toggle:hover { border-color: var(--accent); }
+        .header .subtitle {
+            color: var(--muted);
+            font-size: 14px;
+        }
+        .period-selector {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .period-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--card);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .period-btn:hover { border-color: var(--accent); }
+        .period-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+        .kpi-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+        .kpi-label {
+            font-size: 12px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .kpi-value {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .kpi-change {
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .kpi-change.up { color: var(--green); }
+        .kpi-change.down { color: var(--red); }
+        .kpi-change.neutral { color: var(--muted); }
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        .chart-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+        }
+        .chart-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+        .chart-container {
+            position: relative;
+            height: 280px;
+        }
+        .table-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            overflow-x: auto;
+            margin-bottom: 32px;
+        }
+        .table-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        th {
+            text-align: left;
+            padding: 10px 12px;
+            border-bottom: 2px solid var(--border);
+            color: var(--muted);
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        tr:hover td { background: rgba(99, 102, 241, 0.05); }
+        .row-account td {
+            font-weight: 600;
+            background: rgba(99, 102, 241, 0.08);
+        }
+        .row-campaign td { color: var(--muted); }
+        .row-total td {
+            font-weight: 700;
+            font-size: 14px;
+            border-top: 2px solid var(--accent);
+        }
+        .row-channel td { font-weight: 600; }
+        .positive { color: var(--green); }
+        .negative { color: var(--red); }
+        .footer {
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            padding: 24px 0;
+            border-top: 1px solid var(--border);
+        }
+        .footer a { color: var(--accent); text-decoration: none; }
+        @media (max-width: 768px) {
+            body { padding: 16px; }
+            .charts-grid { grid-template-columns: 1fr; }
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+            .kpi-value { font-size: 22px; }
+            .header h1 { font-size: 22px; }
+        }
+        @media (min-width: 769px) and (max-width: 1200px) {
+            .kpi-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .kpi-card, .chart-card, .table-card {
+            animation: fadeIn 0.4s ease-out both;
+        }
+        .kpi-card:nth-child(1) { animation-delay: 0.05s; }
+        .kpi-card:nth-child(2) { animation-delay: 0.1s; }
+        .kpi-card:nth-child(3) { animation-delay: 0.15s; }
+        .kpi-card:nth-child(4) { animation-delay: 0.2s; }
+        .kpi-card:nth-child(5) { animation-delay: 0.25s; }
+        .kpi-card:nth-child(6) { animation-delay: 0.3s; }
+        .kpi-card:nth-child(7) { animation-delay: 0.35s; }
+        .kpi-card:nth-child(8) { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>🏗️ СК-ТУ — Рекламный дашборд</h1>
+            <div class="subtitle">Яндекс.Директ · 2 кабинета · sk-tu.ru · 15.06–21.06.2026</div>
+        </div>
+        <div class="period-selector">
+            <button class="period-btn active" onclick="showPeriod('w1')">15.06–21.06</button>
+            <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙 Тёмная</button>
+        </div>
+    </div>
+
+    <div class="kpi-grid" id="kpiGrid"></div>
+
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3>💰 Расход и лиды по кабинетам</h3>
+            <div class="chart-container"><canvas id="spendLeadsChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+            <h3>📈 Показы и клики по кабинетам</h3>
+            <div class="chart-container"><canvas id="impressionsClicksChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+            <h3>🎯 Эффективность кампаний</h3>
+            <div class="chart-container"><canvas id="efficiencyChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+            <h3>💵 Стоимость лида (CPA / CPL)</h3>
+            <div class="chart-container"><canvas id="costChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+            <h3>🏢 Расход по кабинетам</h3>
+            <div class="chart-container"><canvas id="accountSpendChart"></canvas></div>
+        </div>
+        <div class="chart-card">
+            <h3>👥 Лиды по каналам</h3>
+            <div class="chart-container"><canvas id="channelLeadsChart"></canvas></div>
+        </div>
+    </div>
+
+    <!-- SEO Block: sk-tu.ru (SPB) -->
+    <div id="seoSectionSpb" style="margin: 32px 0;">
+        <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 16px; color: var(--text);">
+            🔍 SEO Аналитика — sk-tu.ru (СПБ) — 15.06–21.06
+        </h2>
+    </div>
+
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3>📈 SEO Performance (органический трафик)</h3>
+            <div class="chart-container"><canvas id="seoPerformanceChartSpb"></canvas></div>
+        </div>
+        <div class="chart-card">
+            <h3>📄 Топ посадочных страниц (SEO)</h3>
+            <div style="padding: 16px; max-height: 280px; overflow-y: auto;">
+                <table style="width: 100%; font-size: 12px;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <th style="text-align: left; padding: 8px 4px; color: var(--muted);">Страница</th>
+                            <th style="text-align: right; padding: 8px 4px; color: var(--muted);">Клики</th>
+                            <th style="text-align: right; padding: 8px 4px; color: var(--muted);">Показы</th>
+                        </tr>
+                    </thead>
+                    <tbody id="topPagesBodySpb">
+                        <tr><td colspan="3" style="text-align: center; padding: 20px; color: var(--muted);">Загрузка...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="chart-card">
+            <h3>🔎 Топ поисковых запросов</h3>
+            <div style="padding: 16px; max-height: 280px; overflow-y: auto;">
+                <table style="width: 100%; font-size: 12px;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <th style="text-align: left; padding: 8px 4px; color: var(--muted);">Запрос</th>
+                            <th style="text-align: right; padding: 8px 4px; color: var(--muted);">Визиты</th>
+                        </tr>
+                    </thead>
+                    <tbody id="searchQueriesBodySpb">
+                        <tr><td colspan="2" style="text-align: center; padding: 20px; color: var(--muted);">Загрузка...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEO Block: msk.sk-tu.ru (MSK) -->
+    <div id="seoSectionMsk" style="margin: 32px 0;">
+        <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 16px; color: var(--text);">
+            🔍 SEO Аналитика — msk.sk-tu.ru (МСК) — 15.06–21.06
+        </h2>
+    </div>
+
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3>📈 SEO Performance (органический трафик)</h3>
+            <div class="chart-container"><canvas id="seoPerformanceChartMsk"></canvas></div>
+        </div>
+        <div class="chart-card">
+            <h3>📄 Топ посадочных страниц (SEO)</h3>
+            <div style="padding: 16px; max-height: 280px; overflow-y: auto;">
+                <table style="width: 100%; font-size: 12px;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <th style="text-align: left; padding: 8px 4px; color: var(--muted);">Страница</th>
+                            <th style="text-align: right; padding: 8px 4px; color: var(--muted);">Клики</th>
+                            <th style="text-align: right; padding: 8px 4px; color: var(--muted);">Показы</th>
+                        </tr>
+                    </thead>
+                    <tbody id="topPagesBodyMsk">
+                        <tr><td colspan="3" style="text-align: center; padding: 20px; color: var(--muted);">Загрузка...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="chart-card">
+            <h3>🔎 Топ поисковых запросов</h3>
+            <div style="padding: 16px; max-height: 280px; overflow-y: auto;">
+                <table style="width: 100%; font-size: 12px;">
+                    <thead>
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <th style="text-align: left; padding: 8px 4px; color: var(--muted);">Запрос</th>
+                            <th style="text-align: right; padding: 8px 4px; color: var(--muted);">Визиты</th>
+                        </tr>
+                    </thead>
+                    <tbody id="searchQueriesBodyMsk">
+                        <tr><td colspan="2" style="text-align: center; padding: 20px; color: var(--muted);">Загрузка...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-card">
+        <h3 id="detailTableTitle">📋 Детализация за период 15.06–21.06</h3>
+        <table id="detailTable"></table>
+    </div>
+
+    <div class="footer">
+        СК-ТУ · Автоматизация отчётов · sk-tu.ru
+    </div>
+
+<script>
+// ===== DATA =====
+const week = {
+    id: 'w1',
+    label: '15.06–21.06',
+    from: '15.06.2026',
+    to: '21.06.2026',
+    impressions: 222824,
+    clicks: 2349,
+    spend: 120365,
+    leads: 79,
+    target: 13,
+    ctr: 1.05,
+    cpc: 51,
+    cpa: 1524,
+    cpl: 9259,
+    convLead: 3.36,
+    convTarget: 0.58,
+    seo: 0,
+    seoLeads: 2,
+    seoTarget: 2,
+    otherLeads: 0,
+    otherTarget: 0,
+    accounts: {
+        'Кабинет СПБ': {
+            imp: 132694,
+            clicks: 1552,
+            spend: 56314.97,
+            leads: 43,
+            target: 1,
+            campaigns: [
+                { name: 'Каркас. Мастер. СПБ. ОК. gl.', imp: 24194, clicks: 518, spend: 16773.20, leads: 5, target: 0 },
+                { name: 'Каркас. РСЯ. СПБ. ОК. 06-26.', imp: 79723, clicks: 489, spend: 11867.76, leads: 0, target: 0 },
+                { name: 'Каркас. Поиск. СПБ. ОК.', imp: 1397, clicks: 218, spend: 22062.00, leads: 1, target: 1 },
+                { name: 'Копия Каркас. Ретаргетинг. ФИД. СПБ. ОК. 4.', imp: 22551, clicks: 169, spend: 3660.00, leads: 0, target: 0 },
+                { name: 'Каркас. Мастер. СПБ. CPL. 3.', imp: 4829, clicks: 158, spend: 1952.00, leads: 1, target: 0 }
+            ]
+        },
+        'Кабинет МСК': {
+            imp: 90130,
+            clicks: 797,
+            spend: 64050.00,
+            leads: 25,
+            target: 0,
+            campaigns: [
+                { name: 'ЕПК. Каркас. РСЯ. МСК. ОК.', imp: 66252, clicks: 236, spend: 12831.84, leads: 1, target: 0 },
+                { name: 'Каркас. Поиск. МСК.', imp: 4556, clicks: 190, spend: 24085.18, leads: 0, target: 0 },
+                { name: 'Каркас кат. Мастер. МСК. ОК.', imp: 7251, clicks: 161, spend: 8148.80, leads: 2, target: 0 },
+                { name: 'Каркас Пл. Мастер. МСК. ОК.', imp: 4464, clicks: 118, spend: 14695.26, leads: 10, target: 0 },
+                { name: 'Каркас. Ретаргетинг. МСК. ОК. 2.', imp: 3960, clicks: 46, spend: 3658.49, leads: 0, target: 0 },
+                { name: 'Каркас. Ретаргетинг. Фид. МСК. ОК. 2.', imp: 3647, clicks: 46, spend: 630.43, leads: 0, target: 0 }
+            ]
+        }
+    },
+    channels: [
+        { name: 'Яндекс Директ', leads: 45, target: 2, spend: 120365 },
+        { name: 'Instagram', leads: 2, target: 0, spend: 0 },
+        { name: 'SEO', leads: 2, target: 2, spend: 0 },
+        { name: 'Рекомендация', leads: 1, target: 1, spend: 0 },
+        { name: 'Классифайды', leads: 1, target: 1, spend: 0 },
+        { name: 'Оффлайн', leads: 7, target: 7, spend: 0 },
+        { name: 'Без источника', leads: 21, target: 0, spend: 0 }
+    ]
+};
+
+// ===== HELPERS =====
+function fmt(n) {
+    if (n === null || n === undefined || n === '—') return '—';
+    return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+}
+function pct(n) {
+    if (n === null || n === undefined || n === '—') return '—';
+    return n.toFixed(2) + '%';
+}
+function rub(n) {
+    if (n === null || n === undefined || n === '—') return '—';
+    return fmt(Math.round(n)) + ' ₽';
+}
+
+// ===== KPI =====
+function renderKPI(w) {
+    const grid = document.getElementById('kpiGrid');
+    const cards = [
+        { label: 'Показы', value: fmt(w.impressions), color: null },
+        { label: 'Клики', value: fmt(w.clicks), color: null },
+        { label: 'Расход', value: rub(w.spend), color: null },
+        { label: 'Лиды', value: w.leads, color: null },
+        { label: 'Целевые лиды', value: w.target, color: 'var(--green)' },
+        { label: 'CTR', value: pct(w.ctr), color: null },
+        { label: 'CPA', value: rub(w.cpa), color: null },
+        { label: 'CPL', value: rub(w.cpl), color: null }
+    ];
+
+    grid.innerHTML = cards.map(c => {
+        const colorStyle = c.color ? `style="color: ${c.color}"` : '';
+        return `<div class="kpi-card">
+            <div class="kpi-label">${c.label}</div>
+            <div class="kpi-value" ${colorStyle}>${c.value}</div>
+        </div>`;
+    }).join('');
+}
+
+// ===== CHARTS =====
+const chartDefaults = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        legend: { labels: { color: 'var(--text)', font: { size: 12 } } },
+        tooltip: {
+            backgroundColor: 'var(--card)',
+            titleColor: 'var(--text)',
+            bodyColor: 'var(--text)',
+            borderColor: 'var(--border)',
+            borderWidth: 1,
+            padding: 12,
+            cornerRadius: 8
+        }
+    },
+    scales: {
+        x: { ticks: { color: 'var(--muted)' }, grid: { color: 'var(--border)' } },
+        y: { ticks: { color: 'var(--muted)' }, grid: { color: 'var(--border)' } }
+    }
+};
+
+let chartInstances = {};
+
+function destroyCharts() {
+    Object.values(chartInstances).forEach(chart => {
+        if (chart) chart.destroy();
+    });
+    chartInstances = {};
+}
+
+function initCharts(w) {
+    destroyCharts();
+    const labels = Object.keys(w.accounts);
+    const accounts = Object.values(w.accounts);
+
+    // Spend & Leads by account
+    chartInstances.spendLeads = new Chart(document.getElementById('spendLeadsChart'), {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [
+                { label: 'Расход (₽)', data: accounts.map(a => a.spend), backgroundColor: 'rgba(99,102,241,0.7)', borderRadius: 6, yAxisID: 'y' },
+                { label: 'Лиды', data: accounts.map(a => a.leads), type: 'line', borderColor: '#22c55e', backgroundColor: 'rgba(34,197,94,0.1)', tension: 0.3, pointRadius: 6, pointBackgroundColor: '#22c55e', yAxisID: 'y1' },
+                { label: 'Целевые лиды', data: accounts.map(a => a.target), type: 'line', borderColor: '#eab308', backgroundColor: 'rgba(234,179,8,0.1)', tension: 0.3, pointRadius: 6, pointBackgroundColor: '#eab308', yAxisID: 'y1' }
+            ]
+        },
+        options: {
+            ...chartDefaults,
+            scales: {
+                ...chartDefaults.scales,
+                y: { ...chartDefaults.scales.y, position: 'left', title: { display: true, text: 'Расход (₽)', color: '#71717a' } },
+                y1: { ...chartDefaults.scales.y, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'Лиды', color: '#71717a' } }
+            }
+        }
+    });
+
+    // Impressions & Clicks by account
+    chartInstances.impressionsClicks = new Chart(document.getElementById('impressionsClicksChart'), {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [
+                { label: 'Показы', data: accounts.map(a => a.imp), backgroundColor: 'rgba(59,130,246,0.7)', borderRadius: 6, yAxisID: 'y' },
+                { label: 'Клики', data: accounts.map(a => a.clicks), type: 'line', borderColor: '#f97316', backgroundColor: 'rgba(249,115,22,0.1)', tension: 0.3, pointRadius: 6, pointBackgroundColor: '#f97316', yAxisID: 'y1' }
+            ]
+        },
+        options: {
+            ...chartDefaults,
+            scales: {
+                ...chartDefaults.scales,
+                y: { ...chartDefaults.scales.y, position: 'left', title: { display: true, text: 'Показы', color: '#71717a' } },
+                y1: { ...chartDefaults.scales.y, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'Клики', color: '#71717a' } }
+            }
+        }
+    });
+
+    // Efficiency: CTR & Conv by campaign (top 8)
+    const allCampaigns = [];
+    Object.entries(w.accounts).forEach(([accName, acc]) => {
+        acc.campaigns.forEach(c => {
+            allCampaigns.push({ ...c, account: accName });
+        });
+    });
+    const topCampaigns = allCampaigns
+        .map(c => ({ ...c, ctr: c.imp > 0 ? c.clicks / c.imp * 100 : 0, conv: c.clicks > 0 ? c.leads / c.clicks * 100 : 0 }))
+        .sort((a, b) => b.spend - a.spend)
+        .slice(0, 8);
+
+    chartInstances.efficiency = new Chart(document.getElementById('efficiencyChart'), {
+        type: 'bar',
+        data: {
+            labels: topCampaigns.map(c => c.name.length > 25 ? c.name.substring(0, 22) + '...' : c.name),
+            datasets: [
+                { label: 'CTR %', data: topCampaigns.map(c => c.ctr), backgroundColor: 'rgba(99,102,241,0.7)', borderRadius: 6, yAxisID: 'y' },
+                { label: 'Конверсия в лид %', data: topCampaigns.map(c => c.conv), type: 'line', borderColor: '#22c55e', backgroundColor: 'rgba(34,197,94,0.1)', tension: 0.3, pointRadius: 6, pointBackgroundColor: '#22c55e', yAxisID: 'y1' }
+            ]
+        },
+        options: {
+            ...chartDefaults,
+            scales: {
+                ...chartDefaults.scales,
+                y: { ...chartDefaults.scales.y, position: 'left', title: { display: true, text: 'CTR %', color: '#71717a' } },
+                y1: { ...chartDefaults.scales.y, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'Конверсия %', color: '#71717a' } }
+            }
+        }
+    });
+
+    // Cost: CPA & CPL by account
+    chartInstances.cost = new Chart(document.getElementById('costChart'), {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [
+                { label: 'CPA (₽)', data: accounts.map(a => a.leads > 0 ? a.spend / a.leads : 0), backgroundColor: 'rgba(239,68,68,0.7)', borderRadius: 6, yAxisID: 'y' },
+                { label: 'CPL (₽)', data: accounts.map(a => a.target > 0 ? a.spend / a.target : 0), type: 'line', borderColor: '#a855f7', backgroundColor: 'rgba(168,85,247,0.1)', tension: 0.3, pointRadius: 6, pointBackgroundColor: '#a855f7', yAxisID: 'y1' }
+            ]
+        },
+        options: {
+            ...chartDefaults,
+            scales: {
+                ...chartDefaults.scales,
+                y: { ...chartDefaults.scales.y, position: 'left', title: { display: true, text: 'CPA (₽)', color: '#71717a' } },
+                y1: { ...chartDefaults.scales.y, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'CPL (₽)', color: '#71717a' } }
+            }
+        }
+    });
+
+    // Account Spend (doughnut)
+    chartInstances.accountSpend = new Chart(document.getElementById('accountSpendChart'), {
+        type: 'doughnut',
+        data: {
+            labels,
+            datasets: [{
+                data: accounts.map(a => a.spend),
+                backgroundColor: ['#6366f1', '#3b82f6', '#22c55e', '#f97316'],
+                borderColor: '#1a1d27',
+                borderWidth: 3
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom', labels: { color: '#e4e4e7', padding: 16, font: { size: 12 } } },
+                tooltip: {
+                    backgroundColor: '#1a1d27',
+                    titleColor: '#e4e4e7',
+                    bodyColor: '#e4e4e7',
+                    borderColor: '#2a2d3a',
+                    borderWidth: 1,
+                    callbacks: { label: ctx => `${ctx.label}: ${rub(ctx.raw)}` }
+                }
+            }
+        }
+    });
+
+    // Channel Leads (doughnut)
+    chartInstances.channelLeads = new Chart(document.getElementById('channelLeadsChart'), {
+        type: 'doughnut',
+        data: {
+            labels: w.channels.map(c => c.name),
+            datasets: [{
+                data: w.channels.map(c => c.leads),
+                backgroundColor: ['#6366f1', '#f97316', '#22c55e', '#eab308', '#a855f7', '#06b6d4', '#71717a'],
+                borderColor: '#1a1d27',
+                borderWidth: 3
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom', labels: { color: '#e4e4e7', padding: 16, font: { size: 12 } } },
+                tooltip: {
+                    backgroundColor: '#1a1d27',
+                    titleColor: '#e4e4e7',
+                    bodyColor: '#e4e4e7',
+                    borderColor: '#2a2d3a',
+                    borderWidth: 1
+                }
+            }
+        }
+    });
+}
+
+// ===== DETAIL TABLE =====
+function renderDetailTable(w) {
+    const table = document.getElementById('detailTable');
+    const accounts = w.accounts;
+
+    const totalImp = w.impressions;
+    const totalClicks = w.clicks;
+    const totalSpend = w.spend;
+    const totalLeads = w.leads;
+    const totalTarget = w.target;
+
+    const avgCtr = totalClicks / totalImp * 100;
+    const avgCpc = totalSpend / totalClicks;
+    const avgCpa = totalLeads > 0 ? totalSpend / totalLeads : null;
+    const avgCpl = totalTarget > 0 ? totalSpend / totalTarget : null;
+    const convLead = totalClicks > 0 ? totalLeads / totalClicks * 100 : 0;
+    const convTarget = totalLeads > 0 ? totalTarget / totalLeads * 100 : 0;
+
+    let html = `<thead><tr>
+        <th>Канал / Кабинет / Кампания</th><th>Показы</th><th>Клики</th><th>CTR</th><th>CPC</th>
+        <th>Лиды</th><th>Конв.</th><th>CPA</th><th>Ц.Лиды</th><th>Конв.ЦЛ</th><th>CPL</th><th>Расход</th>
+    </tr></thead><tbody>`;
+
+    // Total row
+    html += `<tr class="row-total">
+        <td>Итого</td><td>${fmt(totalImp)}</td><td>${fmt(totalClicks)}</td><td>${pct(avgCtr)}</td><td>${rub(avgCpc)}</td>
+        <td>${totalLeads}</td><td>${pct(convLead)}</td><td>${avgCpa ? rub(avgCpa) : '—'}</td>
+        <td>${totalTarget}</td><td>${pct(convTarget)}</td><td>${avgCpl ? rub(avgCpl) : '—'}</td><td>${rub(totalSpend)}</td>
+    </tr>`;
+
+    // Direct channel row
+    const directLeads = w.channels.find(c => c.name === 'Яндекс Директ')?.leads || 0;
+    const directTarget = w.channels.find(c => c.name === 'Яндекс Директ')?.target || 0;
+    html += `<tr class="row-channel">
+        <td>Яндекс Директ</td><td>${fmt(totalImp)}</td><td>${fmt(totalClicks)}</td><td>${pct(avgCtr)}</td><td>${rub(avgCpc)}</td>
+        <td>${directLeads}</td><td>${pct(directLeads / totalClicks * 100)}</td><td>${rub(totalSpend / directLeads)}</td>
+        <td>${directTarget}</td><td>${pct(directTarget / directLeads * 100)}</td><td>${rub(totalSpend / directTarget)}</td><td>${rub(totalSpend)}</td>
+    </tr>`;
+
+    // Account rows + campaigns
+    Object.entries(accounts).forEach(([accName, acc]) => {
+        const accCtr = acc.imp > 0 ? acc.clicks / acc.imp * 100 : 0;
+        const accCpc = acc.clicks > 0 ? acc.spend / acc.clicks : 0;
+        const accCpa = acc.leads > 0 ? acc.spend / acc.leads : null;
+        const accCpl = acc.target > 0 ? acc.spend / acc.target : null;
+        const accConvLead = acc.clicks > 0 ? acc.leads / acc.clicks * 100 : 0;
+        const accConvTarget = acc.leads > 0 ? acc.target / acc.leads * 100 : 0;
+
+        html += `<tr class="row-account">
+            <td>${accName}</td><td>${fmt(acc.imp)}</td><td>${fmt(acc.clicks)}</td><td>${pct(accCtr)}</td><td>${rub(accCpc)}</td>
+            <td>${acc.leads}</td><td>${pct(accConvLead)}</td><td>${accCpa ? rub(accCpa) : '—'}</td>
+            <td>${acc.target}</td><td>${accConvTarget ? pct(accConvTarget) : '—'}</td><td>${accCpl ? rub(accCpl) : '—'}</td><td>${rub(acc.spend)}</td>
+        </tr>`;
+
+        acc.campaigns.forEach(c => {
+            const cCtr = c.imp > 0 ? c.clicks / c.imp * 100 : 0;
+            const cCpc = c.clicks > 0 ? c.spend / c.clicks : 0;
+            const cCpa = c.leads > 0 ? c.spend / c.leads : null;
+            const cCpl = c.target > 0 ? c.spend / c.target : null;
+            const cConvLead = c.clicks > 0 ? c.leads / c.clicks * 100 : 0;
+            const cConvTarget = c.leads > 0 ? c.target / c.leads * 100 : 0;
+
+            html += `<tr class="row-campaign">
+                <td style="padding-left: 32px;">${c.name}</td><td>${fmt(c.imp)}</td><td>${fmt(c.clicks)}</td><td>${pct(cCtr)}</td><td>${rub(cCpc)}</td>
+                <td>${c.leads}</td><td>${pct(cConvLead)}</td><td>${cCpa ? rub(cCpa) : '—'}</td>
+                <td>${c.target}</td><td>${cConvTarget ? pct(cConvTarget) : '—'}</td><td>${cCpl ? rub(cCpl) : '—'}</td><td>${rub(c.spend)}</td>
+            </tr>`;
+        });
+    });
+
+    // Other channels rows
+    w.channels.filter(c => c.name !== 'Яндекс Директ').forEach(c => {
+        const chConvTarget = c.leads > 0 ? c.target / c.leads * 100 : 0;
+        html += `<tr class="row-channel">
+            <td>${c.name}</td><td>—</td><td>—</td><td>—</td><td>—</td>
+            <td>${c.leads}</td><td>—</td><td>—</td>
+            <td>${c.target}</td><td>${chConvTarget ? pct(chConvTarget) : '—'}</td><td>—</td><td>—</td>
+        </tr>`;
+    });
+
+    html += '</tbody>';
+    table.innerHTML = html;
+}
+
+// ===== SEO DATA =====
+const seoDataSpb = {
+    stats: {
+        visits: 1666,
+        users: 1390,
+        page_depth: 3.03,
+        avg_duration: 151, // ~ 2m 31s
+        bounce_rate: 20.09
+    },
+    topPages: [
+        { url: '/catalog/karkasnye-doma/', visits: 688, impressions: 10560 },
+        { url: '/catalog/karkasnye-doma/100-150m2/', visits: 421, impressions: 2939 },
+        { url: '/catalog/karkasnye-doma/dvuhetazhnye/', visits: 314, impressions: 1537 },
+        { url: '/catalog/karkasnye-doma/odnoetazhnye/', visits: 267, impressions: 1750 },
+        { url: '/catalog/karkasnye-doma/s-terrasoj/', visits: 190, impressions: 900 },
+        { url: '/calculator/', visits: 180, impressions: 897 },
+        { url: '/', visits: 113, impressions: 2062 },
+        { url: '/mortgage/', visits: 109, impressions: 668 },
+        { url: '/catalog/karkasnye-doma/s-mansardoy/', visits: 84, impressions: 344 },
+        { url: '/catalog/karkasnye-doma/dk-200/', visits: 76, impressions: 149 }
+    ],
+    searchQueries: [
+        { query: 'строительство каркасных домов под ключ', visits: 45 },
+        { query: 'каркасные дома под ключ', visits: 33 },
+        { query: 'купить каркасный дом в спб', visits: 32 },
+        { query: 'каркасный дом с террасой', visits: 27 },
+        { query: 'проекты каркасных домов спб', visits: 25 },
+        { query: 'строительство каркасных домов', visits: 24 },
+        { query: 'каркасный дом 2 этажа', visits: 24 },
+        { query: 'купить каркасный дом под ключ в спб', visits: 23 },
+        { query: 'стоимость каркасного дома', visits: 22 },
+        { query: 'каркасные дома 100 м', visits: 22 }
+    ]
+};
+
+const seoDataMsk = {
+    stats: {
+        visits: 768,
+        users: 660,
+        page_depth: 3.29,
+        avg_duration: 164, // ~ 2m 44s
+        bounce_rate: 16.74
+    },
+    topPages: [
+        { url: '/articles/stroitelstvo/pravila-razmeshcheniya-stroeniy-na-zemelnom-uchastke-v-2026-polnoe-rukovodstvo-dlya-izhs-i-snt/', visits: 449, impressions: 6732 },
+        { url: '/catalog/karkasnye-doma/odnoetazhnye/', visits: 281, impressions: 11162 },
+        { url: '/catalog/karkasnye-doma/', visits: 187, impressions: 16360 },
+        { url: '/', visits: 113, impressions: 4708 },
+        { url: '/catalog/karkasnye-doma/100-150m2/', visits: 56, impressions: 3095 },
+        { url: '/catalog/karkasnye-doma/dvuhetazhnye/', visits: 56, impressions: 1043 },
+        { url: '/calculator/', visits: 49, impressions: 499 },
+        { url: '/catalog/karkasnye-doma/s-terrasoj/', visits: 41, impressions: 475 },
+        { url: '/catalog/karkasnye-doma/s-mansardoy/', visits: 33, impressions: 188 },
+        { url: '/catalog/karkasnye-doma/3-spalni/', visits: 26, impressions: 78 }
+    ],
+    searchQueries: [
+        { query: 'теплый угол', visits: 51 },
+        { query: 'строительство каркасных домов', visits: 16 },
+        { query: 'тёплый угол строительство каркасных домов', visits: 14 },
+        { query: 'нормы строительства на земельном участке от соседей 2026', visits: 13 },
+        { query: 'одноэтажный каркасный дом под ключ цена', visits: 11 },
+        { query: 'проекты каркасных домов с мансардой', visits: 11 },
+        { query: 'каркасные дома под ключ проекты и цены', visits: 10 },
+        { query: 'одноэтажный каркасный дом цена', visits: 10 },
+        { query: 'расстояние построек от забора соседа по новым нормам 2026', visits: 10 },
+        { query: 'каркасный дом под ключ', visits: 9 }
+    ]
+};
+
+// ===== SEO RENDER =====
+function initSEO() {
+    initSEOSection('Spb', seoDataSpb);
+    initSEOSection('Msk', seoDataMsk);
+}
+
+function initSEOSection(suffix, data) {
+    const stats = data.stats;
+    const ctx = document.getElementById('seoPerformanceChart' + suffix).getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Визиты', 'Пользователи', 'Глубина', 'Время (сек)'],
+            datasets: [{
+                label: 'SEO Метрики',
+                data: [stats.visits, stats.users, stats.page_depth * 50, stats.avg_duration],
+                backgroundColor: [
+                    'rgba(34, 197, 94, 0.7)',
+                    'rgba(59, 130, 246, 0.7)',
+                    'rgba(168, 85, 247, 0.7)',
+                    'rgba(249, 115, 22, 0.7)'
+                ],
+                borderRadius: 6
+            }]
+        },
+        options: {
+            ...chartDefaults,
+            plugins: {
+                ...chartDefaults.plugins,
+                legend: { display: false },
+                tooltip: {
+                    ...chartDefaults.plugins.tooltip,
+                    callbacks: {
+                        label: (ctx) => {
+                            const label = ctx.label;
+                            if (label === 'Визиты') return `Визиты: ${fmt(stats.visits)}`;
+                            if (label === 'Пользователи') return `Пользователи: ${fmt(stats.users)}`;
+                            if (label === 'Глубина') return `Глубина: ${stats.page_depth.toFixed(2)} стр.`;
+                            if (label === 'Время (сек)') return `Время: ${Math.floor(stats.avg_duration / 60)} м ${stats.avg_duration % 60} с`;
+                            return ctx.raw;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    ...chartDefaults.scales.y,
+                    title: { display: true, text: 'Значение', color: '#71717a' }
+                }
+            }
+        }
+    });
+
+    // Bounce rate badge
+    const chartCard = document.getElementById('seoPerformanceChart' + suffix).closest('.chart-card');
+    let badge = chartCard.querySelector('.seo-bounce-badge');
+    if (!badge) {
+        badge = document.createElement('div');
+        badge.className = 'seo-bounce-badge';
+        badge.style.cssText = 'position: absolute; top: 16px; right: 16px; background: rgba(34,197,94,0.2); color: #22c55e; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: 600;';
+        chartCard.style.position = 'relative';
+        chartCard.appendChild(badge);
+    }
+    badge.textContent = `Отказы: ${stats.bounce_rate.toFixed(2)}%`;
+
+    renderTopLandingPages('topPagesBody' + suffix, data.topPages);
+    renderSearchQueries('searchQueriesBody' + suffix, data.searchQueries);
+}
+
+function renderTopLandingPages(tbodyId, pages) {
+    const tbody = document.getElementById(tbodyId);
+    if (!pages || pages.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 20px; color: var(--muted);">Нет данных</td></tr>';
+        return;
+    }
+    tbody.innerHTML = pages.map((page, index) => {
+        let url = page.url;
+        if (url.length > 35) url = url.substring(0, 32) + '...';
+        return `
+            <tr style="border-bottom: 1px solid var(--border);">
+                <td style="padding: 8px 4px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="color: var(--muted); font-size: 10px; min-width: 16px;">${index + 1}</span>
+                        <span>${url}</span>
+                    </div>
+                </td>
+                <td style="padding: 8px 4px; text-align: right; font-weight: 600;">${fmt(page.visits)}</td>
+                <td style="padding: 8px 4px; text-align: right; color: var(--accent); font-weight: 600;">${fmt(page.impressions)}</td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function renderSearchQueries(tbodyId, queries) {
+    const tbody = document.getElementById(tbodyId);
+    if (!queries || queries.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="2" style="text-align: center; padding: 20px; color: var(--muted);">Нет данных</td></tr>';
+        return;
+    }
+    tbody.innerHTML = queries.map((q, index) => {
+        let query = q.query;
+        if (query.length > 45) query = query.substring(0, 42) + '...';
+        return `
+            <tr style="border-bottom: 1px solid var(--border);">
+                <td style="padding: 8px 4px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="color: var(--muted); font-size: 10px; min-width: 16px;">${index + 1}</span>
+                        <span>${query}</span>
+                    </div>
+                </td>
+                <td style="padding: 8px 4px; text-align: right; font-weight: 600; color: var(--accent);">${fmt(q.visits)}</td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function showPeriod(period) {
+    renderKPI(week);
+    initCharts(week);
+    renderDetailTable(week);
+}
+
+function toggleTheme() {
+    const html = document.documentElement;
+    const btn = document.getElementById('themeToggle');
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+        html.removeAttribute('data-theme');
+        btn.innerHTML = '🌙 Тёмная';
+        localStorage.setItem('theme', 'light');
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        btn.innerHTML = '☀️ Светлая';
+        localStorage.setItem('theme', 'dark');
+    }
+    initCharts(week);
+}
+
+// ===== INIT =====
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.getElementById('themeToggle').innerHTML = '☀️ Светлая';
+}
+renderKPI(week);
+initCharts(week);
+renderDetailTable(week);
+initSEO();
+</script>
+</body>
+</html>
