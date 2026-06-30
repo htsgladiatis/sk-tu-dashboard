@@ -298,40 +298,86 @@
         <h2 style="font-size: 22px; margin-bottom: 24px; color: var(--text);">🔍 SEO Аналитика — <span id="seoTitle"></span></h2>
     </div>
 
-    <div class="charts-grid" style="grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));">
-        <div class="chart-card">
-            <h3>📊 SEO Performance (органический трафик)</h3>
-            <div class="chart-container"><canvas id="seoPerformanceChart"></canvas></div>
-        </div>
+    <!-- SEO СПБ (sk-tu.ru) -->
+    <div style="margin-bottom: 24px;">
+        <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--text);">📍 СПБ — sk-tu.ru</h3>
+        <div class="charts-grid" style="grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));">
+            <div class="chart-card">
+                <h3>📊 SEO Performance (органический трафик)</h3>
+                <div class="chart-container"><canvas id="seoPerformanceChartSpb"></canvas></div>
+            </div>
 
-        <div class="chart-card">
-            <h3>📄 Топ посадочных страниц (SEO)</h3>
-            <div style="max-height: 320px; overflow-y: auto;">
-                <table id="topPagesTable" style="font-size: 11px;">
-                    <thead>
-                        <tr style="position: sticky; top: 0; background: var(--card); z-index: 1;">
-                            <th style="text-align: left; padding: 6px;">Страница</th>
-                            <th style="text-align: right; padding: 6px;">Клики</th>
-                            <th style="text-align: right; padding: 6px;">Показы</th>
-                        </tr>
-                    </thead>
-                    <tbody id="topPagesBody"></tbody>
-                </table>
+            <div class="chart-card">
+                <h3>📄 Топ посадочных страниц (SEO)</h3>
+                <div style="max-height: 320px; overflow-y: auto;">
+                    <table id="topPagesTableSpb" style="font-size: 11px;">
+                        <thead>
+                            <tr style="position: sticky; top: 0; background: var(--card); z-index: 1;">
+                                <th style="text-align: left; padding: 6px;">Страница</th>
+                                <th style="text-align: right; padding: 6px;">Клики</th>
+                                <th style="text-align: right; padding: 6px;">Показы</th>
+                            </tr>
+                        </thead>
+                        <tbody id="topPagesBodySpb"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3>🔎 Топ поисковых запросов</h3>
+                <div style="max-height: 320px; overflow-y: auto;">
+                    <table id="topQueriesTableSpb" style="font-size: 11px;">
+                        <thead>
+                            <tr style="position: sticky; top: 0; background: var(--card); z-index: 1;">
+                                <th style="text-align: left; padding: 6px;">Запрос</th>
+                                <th style="text-align: right; padding: 6px;">Визиты</th>
+                            </tr>
+                        </thead>
+                        <tbody id="topQueriesBodySpb"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
+    </div>
 
-        <div class="chart-card">
-            <h3>🔎 Топ поисковых запросов</h3>
-            <div style="max-height: 320px; overflow-y: auto;">
-                <table id="topQueriesTable" style="font-size: 11px;">
-                    <thead>
-                        <tr style="position: sticky; top: 0; background: var(--card); z-index: 1;">
-                            <th style="text-align: left; padding: 6px;">Запрос</th>
-                            <th style="text-align: right; padding: 6px;">Визиты</th>
-                        </tr>
-                    </thead>
-                    <tbody id="topQueriesBody"></tbody>
-                </table>
+    <!-- SEO МСК (msk.sk-tu.ru) -->
+    <div style="margin-bottom: 24px;">
+        <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--text);">📍 МСК — msk.sk-tu.ru</h3>
+        <div class="charts-grid" style="grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));">
+            <div class="chart-card">
+                <h3>📊 SEO Performance (органический трафик)</h3>
+                <div class="chart-container"><canvas id="seoPerformanceChartMsk"></canvas></div>
+            </div>
+
+            <div class="chart-card">
+                <h3>📄 Топ посадочных страниц (SEO)</h3>
+                <div style="max-height: 320px; overflow-y: auto;">
+                    <table id="topPagesTableMsk" style="font-size: 11px;">
+                        <thead>
+                            <tr style="position: sticky; top: 0; background: var(--card); z-index: 1;">
+                                <th style="text-align: left; padding: 6px;">Страница</th>
+                                <th style="text-align: right; padding: 6px;">Клики</th>
+                                <th style="text-align: right; padding: 6px;">Показы</th>
+                            </tr>
+                        </thead>
+                        <tbody id="topPagesBodyMsk"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3>🔎 Топ поисковых запросов</h3>
+                <div style="max-height: 320px; overflow-y: auto;">
+                    <table id="topQueriesTableMsk" style="font-size: 11px;">
+                        <thead>
+                            <tr style="position: sticky; top: 0; background: var(--card); z-index: 1;">
+                                <th style="text-align: left; padding: 6px;">Запрос</th>
+                                <th style="text-align: right; padding: 6px;">Визиты</th>
+                            </tr>
+                        </thead>
+                        <tbody id="topQueriesBodyMsk"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -404,7 +450,15 @@ const weeks = {
             { name: 'Оффлайн', leads: 7, target: 7, spend: 0 },
             { name: 'Без источника', leads: 21, target: 0, spend: 0 }
         ],
-        topPages: []
+        topPages: [],
+        seoStats: {
+            spb: { visits: 0, users: 0, pageDepth: 0, avgDuration: 0 },
+            msk: { visits: 0, users: 0, pageDepth: 0, avgDuration: 0 }
+        },
+        topPagesSpb: [],
+        topPagesMsk: [],
+        topQueriesSpb: [],
+        topQueriesMsk: []
     },
     w2: {
         id: 'w2',
@@ -467,34 +521,60 @@ const weeks = {
             { name: 'SEO', leads: 0, target: 0, spend: 0 },
             { name: 'Без источника', leads: 77, target: 2, spend: 0 }
         ],
-        topPages: [
-            { url: "/catalog/karkasnye-doma/", domain: "sk-tu.ru", impressions: 17343, clicks: 998, ctr: 5.75 },
-            { url: "/catalog/karkasnye-doma/odnoetazhnye/", domain: "msk.sk-tu.ru", impressions: 30860, clicks: 765, ctr: 2.48 },
-            { url: "/articles/stroitelstvo/pravila-razmeshcheniya-stroeniy-na-zemelnom-uchastke-v-2026-polnoe-rukovodstvo-dlya-izhs-i-snt/", domain: "msk.sk-tu.ru", impressions: 10412, clicks: 509, ctr: 4.89 },
-            { url: "/catalog/karkasnye-doma/", domain: "msk.sk-tu.ru", impressions: 22323, clicks: 430, ctr: 1.93 },
-            { url: "/catalog/karkasnye-doma/100-150m2/", domain: "sk-tu.ru", impressions: 2290, clicks: 206, ctr: 9.00 },
-            { url: "/catalog/karkasnye-doma/odnoetazhnye/", domain: "sk-tu.ru", impressions: 2328, clicks: 179, ctr: 7.69 },
-            { url: "/", domain: "msk.sk-tu.ru", impressions: 6562, clicks: 161, ctr: 2.45 },
-            { url: "/catalog/karkasnye-doma/dvuhetazhnye/", domain: "msk.sk-tu.ru", impressions: 2116, clicks: 142, ctr: 6.71 },
-            { url: "/catalog/karkasnye-doma/dvuhetazhnye/", domain: "sk-tu.ru", impressions: 1696, clicks: 129, ctr: 7.61 },
-            { url: "/catalog/karkasnye-doma/100-150m2/", domain: "msk.sk-tu.ru", impressions: 4871, clicks: 110, ctr: 2.26 }
-        ],
+        topPages: [],
         seoStats: {
             spb: { visits: 2579, users: 2100, pageDepth: 2.8, avgDuration: 145 },
             msk: { visits: 2813, users: 2300, pageDepth: 3.1, avgDuration: 160 }
         },
-        topQueries: [
-            { query: 'теплый угол', visits: 69 },
-            { query: 'пк-193 теплый угол', visits: 36 },
+        topPagesSpb: [
+            { url: "/catalog/karkasnye-doma/", impressions: 17343, clicks: 998 },
+            { url: "/catalog/karkasnye-doma/100-150m2/", impressions: 2290, clicks: 206 },
+            { url: "/catalog/karkasnye-doma/odnoetazhnye/", impressions: 2328, clicks: 179 },
+            { url: "/catalog/karkasnye-doma/dvuhetazhnye/", impressions: 1696, clicks: 129 },
+            { url: "/calculator/", impressions: 704, clicks: 82 },
+            { url: "/", impressions: 2252, clicks: 80 },
+            { url: "/articles/stroitelstvo/pravila-razmeshcheniya-stroeniy-na-zemelnom-uchastke-v-2026-polnoe-rukovodstvo-dlya-izhs-i-snt/", impressions: 1082, clicks: 66 },
+            { url: "/catalog/karkasnye-doma/s-terrasoj/", impressions: 429, clicks: 54 },
+            { url: "/catalog/karkasnye-doma/s-mansardoy/", impressions: 454, clicks: 48 },
+            { url: "/catalog/karkasnye-doma/pmzh/", impressions: 806, clicks: 39 }
+        ],
+        topPagesMsk: [
+            { url: "/catalog/karkasnye-doma/odnoetazhnye/", impressions: 30860, clicks: 765 },
+            { url: "/articles/stroitelstvo/pravila-razmeshcheniya-stroeniy-na-zemelnom-uchastke-v-2026-polnoe-rukovodstvo-dlya-izhs-i-snt/", impressions: 10412, clicks: 509 },
+            { url: "/catalog/karkasnye-doma/", impressions: 22323, clicks: 430 },
+            { url: "/", impressions: 6562, clicks: 161 },
+            { url: "/catalog/karkasnye-doma/dvuhetazhnye/", impressions: 2116, clicks: 142 },
+            { url: "/catalog/karkasnye-doma/100-150m2/", impressions: 4871, clicks: 110 },
+            { url: "/catalog/karkasnye-doma/s-terrasoj/", impressions: 973, clicks: 88 },
+            { url: "/catalog/karkasnye-doma/3-spalni/", impressions: 200, clicks: 69 },
+            { url: "/calculator/", impressions: 874, clicks: 56 },
+            { url: "/catalog/karkasnye-doma/s-mansardoy/", impressions: 422, clicks: 48 }
+        ],
+        topQueriesSpb: [
+            { query: 'теплый угол', visits: 30 },
             { query: 'купить каркасный дом в спб', visits: 19 },
             { query: 'теплый угол строительная компания', visits: 17 },
             { query: 'тёплый угол строительство каркасных домов', visits: 15 },
             { query: 'тёплый угол строительство каркасных домов в спб', visits: 11 },
-            { query: 'нормы строительства на земельном участке от соседей 2026', visits: 10 },
             { query: 'каркасный дом с террасой', visits: 9 },
             { query: 'каркасный дом под ключ', visits: 7 },
-            { query: 'нормы расположения построек на земельном участке 2026', visits: 7 }
-        ]
+            { query: 'каркасный дом 2 этажа', visits: 6 },
+            { query: 'sk_tu.ru', visits: 5 },
+            { query: 'купить каркасный дом спб', visits: 5 }
+        ],
+        topQueriesMsk: [
+            { query: 'теплый угол', visits: 69 },
+            { query: 'пк-193 теплый угол', visits: 36 },
+            { query: 'тёплый угол строительство каркасных домов', visits: 11 },
+            { query: 'нормы строительства на земельном участке от соседей 2026', visits: 10 },
+            { query: 'нормы расположения построек на земельном участке 2026', visits: 7 },
+            { query: 'теплый угол строительная компания', visits: 7 },
+            { query: 'тёплый угол', visits: 6 },
+            { query: 'нормы строительства в снт 2026', visits: 4 },
+            { query: 'нормы отступа от границ участка при строительстве дома ижс 2026', visits: 3 },
+            { query: 'проектирование каркасных домов', visits: 3 }
+        ],
+        topQueries: []
     }
 };
 
@@ -807,116 +887,195 @@ function renderDetailTable(w) {
     table.innerHTML = html;
 }
 
-// ===== TOP PAGES TABLE =====
+// ===== TOP PAGES TABLES =====
 function renderTopPages(w) {
-    const tbody = document.getElementById('topPagesBody');
-    if (!w.topPages || w.topPages.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 20px; color: var(--muted);">Нет данных за этот период</td></tr>';
-        return;
+    // СПБ
+    const tbodySpb = document.getElementById('topPagesBodySpb');
+    if (!w.topPagesSpb || w.topPagesSpb.length === 0) {
+        tbodySpb.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 20px; color: var(--muted);">Нет данных</td></tr>';
+    } else {
+        let htmlSpb = '';
+        w.topPagesSpb.slice(0, 10).forEach((page, idx) => {
+            const shortUrl = page.url.length > 50 ? page.url.substring(0, 47) + '...' : page.url;
+            htmlSpb += `<tr style="border-bottom: 1px solid var(--border);">
+                <td style="padding: 6px;">
+                    <div style="font-size: 10px; color: var(--muted); margin-bottom: 2px;">${idx + 1}.</div>
+                    <div style="font-size: 11px; word-break: break-all;">${shortUrl}</div>
+                </td>
+                <td style="text-align: right; padding: 6px; font-weight: 600;">${fmt(page.clicks)}</td>
+                <td style="text-align: right; padding: 6px; color: var(--muted); font-size: 11px;">${fmt(page.impressions)}</td>
+            </tr>`;
+        });
+        tbodySpb.innerHTML = htmlSpb;
     }
 
-    let html = '';
-    w.topPages.slice(0, 10).forEach((page, idx) => {
-        const shortUrl = page.url.length > 50 ? page.url.substring(0, 47) + '...' : page.url;
-        const domain = page.domain === 'sk-tu.ru' ? 'СПБ' : 'МСК';
-        html += `<tr style="border-bottom: 1px solid var(--border);">
-            <td style="padding: 6px;">
-                <div style="font-size: 10px; color: var(--muted); margin-bottom: 2px;">${idx + 1}. ${domain}</div>
-                <div style="font-size: 11px; word-break: break-all;">${shortUrl}</div>
-            </td>
-            <td style="text-align: right; padding: 6px; font-weight: 600;">${fmt(page.clicks)}</td>
-            <td style="text-align: right; padding: 6px; color: var(--muted); font-size: 11px;">${fmt(page.impressions)}</td>
-        </tr>`;
-    });
-
-    tbody.innerHTML = html;
+    // МСК
+    const tbodyMsk = document.getElementById('topPagesBodyMsk');
+    if (!w.topPagesMsk || w.topPagesMsk.length === 0) {
+        tbodyMsk.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 20px; color: var(--muted);">Нет данных</td></tr>';
+    } else {
+        let htmlMsk = '';
+        w.topPagesMsk.slice(0, 10).forEach((page, idx) => {
+            const shortUrl = page.url.length > 50 ? page.url.substring(0, 47) + '...' : page.url;
+            htmlMsk += `<tr style="border-bottom: 1px solid var(--border);">
+                <td style="padding: 6px;">
+                    <div style="font-size: 10px; color: var(--muted); margin-bottom: 2px;">${idx + 1}.</div>
+                    <div style="font-size: 11px; word-break: break-all;">${shortUrl}</div>
+                </td>
+                <td style="text-align: right; padding: 6px; font-weight: 600;">${fmt(page.clicks)}</td>
+                <td style="text-align: right; padding: 6px; color: var(--muted); font-size: 11px;">${fmt(page.impressions)}</td>
+            </tr>`;
+        });
+        tbodyMsk.innerHTML = htmlMsk;
+    }
 }
 
-// ===== TOP QUERIES TABLE =====
+// ===== TOP QUERIES TABLES =====
 function renderTopQueries(w) {
-    const tbody = document.getElementById('topQueriesBody');
-    if (!w.topQueries || w.topQueries.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="2" style="text-align: center; padding: 20px; color: var(--muted);">Нет данных за этот период</td></tr>';
-        return;
+    // СПБ
+    const tbodySpb = document.getElementById('topQueriesBodySpb');
+    if (!w.topQueriesSpb || w.topQueriesSpb.length === 0) {
+        tbodySpb.innerHTML = '<tr><td colspan="2" style="text-align: center; padding: 20px; color: var(--muted);">Нет данных</td></tr>';
+    } else {
+        let htmlSpb = '';
+        w.topQueriesSpb.slice(0, 10).forEach((q, idx) => {
+            htmlSpb += `<tr style="border-bottom: 1px solid var(--border);">
+                <td style="padding: 6px;">
+                    <div style="font-size: 11px;">${idx + 1}. ${q.query}</div>
+                </td>
+                <td style="text-align: right; padding: 6px; font-weight: 600;">${q.visits}</td>
+            </tr>`;
+        });
+        tbodySpb.innerHTML = htmlSpb;
     }
 
-    let html = '';
-    w.topQueries.slice(0, 10).forEach((q, idx) => {
-        html += `<tr style="border-bottom: 1px solid var(--border);">
-            <td style="padding: 6px;">
-                <div style="font-size: 11px;">${idx + 1}. ${q.query}</div>
-            </td>
-            <td style="text-align: right; padding: 6px; font-weight: 600;">${q.visits}</td>
-        </tr>`;
-    });
-
-    tbody.innerHTML = html;
+    // МСК
+    const tbodyMsk = document.getElementById('topQueriesBodyMsk');
+    if (!w.topQueriesMsk || w.topQueriesMsk.length === 0) {
+        tbodyMsk.innerHTML = '<tr><td colspan="2" style="text-align: center; padding: 20px; color: var(--muted);">Нет данных</td></tr>';
+    } else {
+        let htmlMsk = '';
+        w.topQueriesMsk.slice(0, 10).forEach((q, idx) => {
+            htmlMsk += `<tr style="border-bottom: 1px solid var(--border);">
+                <td style="padding: 6px;">
+                    <div style="font-size: 11px;">${idx + 1}. ${q.query}</div>
+                </td>
+                <td style="text-align: right; padding: 6px; font-weight: 600;">${q.visits}</td>
+            </tr>`;
+        });
+        tbodyMsk.innerHTML = htmlMsk;
+    }
 }
 
-// ===== SEO PERFORMANCE CHART =====
+// ===== SEO PERFORMANCE CHARTS =====
 function renderSeoChart(w) {
-    const canvas = document.getElementById('seoPerformanceChart');
-    const ctx = canvas.getContext('2d');
+    // График СПБ
+    const canvasSpb = document.getElementById('seoPerformanceChartSpb');
+    const ctxSpb = canvasSpb.getContext('2d');
     
-    // Уничтожаем предыдущий график
-    if (chartInstances.seoPerformance) {
-        chartInstances.seoPerformance.destroy();
+    if (chartInstances.seoPerformanceSpb) {
+        chartInstances.seoPerformanceSpb.destroy();
     }
 
-    if (!w.seoStats) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.font = '14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-        ctx.fillStyle = 'var(--muted)';
-        ctx.textAlign = 'center';
-        ctx.fillText('Нет данных за этот период', canvas.width / 2, canvas.height / 2);
-        return;
-    }
-
-    const spb = w.seoStats.spb;
-    const msk = w.seoStats.msk;
-    const total = {
-        visits: spb.visits + msk.visits,
-        users: spb.users + msk.users,
-        pageDepth: ((spb.pageDepth * spb.visits + msk.pageDepth * msk.visits) / (spb.visits + msk.visits)),
-        avgDuration: Math.round((spb.avgDuration * spb.visits + msk.avgDuration * msk.visits) / (spb.visits + msk.visits))
-    };
-
-    chartInstances.seoPerformance = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Визиты', 'Пользователи', 'Глубина', 'Время (сек)'],
-            datasets: [{
-                data: [total.visits, total.users, total.pageDepth * 100, total.avgDuration],
-                backgroundColor: ['#22c55e', '#3b82f6', '#a855f7', '#f97316'],
-                borderRadius: 4
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    backgroundColor: 'var(--card)',
-                    titleColor: 'var(--text)',
-                    bodyColor: 'var(--text)',
-                    borderColor: 'var(--border)',
-                    borderWidth: 1,
-                    callbacks: {
-                        label: (ctx) => {
-                            let val = ctx.parsed.y;
-                            if (ctx.label === 'Глубина') val = (val / 100).toFixed(2);
-                            return `${ctx.label}: ${val}`;
+    if (!w.seoStats || w.seoStats.spb.visits === 0) {
+        ctxSpb.clearRect(0, 0, canvasSpb.width, canvasSpb.height);
+        ctxSpb.font = '12px -apple-system';
+        ctxSpb.fillStyle = 'var(--muted)';
+        ctxSpb.textAlign = 'center';
+        ctxSpb.fillText('Нет данных', canvasSpb.width / 2, canvasSpb.height / 2);
+    } else {
+        const spb = w.seoStats.spb;
+        chartInstances.seoPerformanceSpb = new Chart(ctxSpb, {
+            type: 'bar',
+            data: {
+                labels: ['Визиты', 'Пользователи', 'Глубина', 'Время (сек)'],
+                datasets: [{
+                    data: [spb.visits, spb.users, spb.pageDepth * 100, spb.avgDuration],
+                    backgroundColor: ['#22c55e', '#3b82f6', '#a855f7', '#f97316'],
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'var(--card)',
+                        titleColor: 'var(--text)',
+                        bodyColor: 'var(--text)',
+                        borderColor: 'var(--border)',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: (ctx) => {
+                                let val = ctx.parsed.y;
+                                if (ctx.label === 'Глубина') val = (val / 100).toFixed(2);
+                                return `${ctx.label}: ${val}`;
+                            }
                         }
                     }
+                },
+                scales: {
+                    x: { ticks: { color: 'var(--muted)', font: { size: 10 } }, grid: { display: false } },
+                    y: { ticks: { color: 'var(--muted)', font: { size: 10 } }, grid: { color: 'var(--border)' } }
                 }
-            },
-            scales: {
-                x: { ticks: { color: 'var(--muted)', font: { size: 10 } }, grid: { display: false } },
-                y: { ticks: { color: 'var(--muted)', font: { size: 10 } }, grid: { color: 'var(--border)' } }
             }
-        }
-    });
+        });
+    }
+
+    // График МСК
+    const canvasMsk = document.getElementById('seoPerformanceChartMsk');
+    const ctxMsk = canvasMsk.getContext('2d');
+    
+    if (chartInstances.seoPerformanceMsk) {
+        chartInstances.seoPerformanceMsk.destroy();
+    }
+
+    if (!w.seoStats || w.seoStats.msk.visits === 0) {
+        ctxMsk.clearRect(0, 0, canvasMsk.width, canvasMsk.height);
+        ctxMsk.font = '12px -apple-system';
+        ctxMsk.fillStyle = 'var(--muted)';
+        ctxMsk.textAlign = 'center';
+        ctxMsk.fillText('Нет данных', canvasMsk.width / 2, canvasMsk.height / 2);
+    } else {
+        const msk = w.seoStats.msk;
+        chartInstances.seoPerformanceMsk = new Chart(ctxMsk, {
+            type: 'bar',
+            data: {
+                labels: ['Визиты', 'Пользователи', 'Глубина', 'Время (сек)'],
+                datasets: [{
+                    data: [msk.visits, msk.users, msk.pageDepth * 100, msk.avgDuration],
+                    backgroundColor: ['#22c55e', '#3b82f6', '#a855f7', '#f97316'],
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'var(--card)',
+                        titleColor: 'var(--text)',
+                        bodyColor: 'var(--text)',
+                        borderColor: 'var(--border)',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: (ctx) => {
+                                let val = ctx.parsed.y;
+                                if (ctx.label === 'Глубина') val = (val / 100).toFixed(2);
+                                return `${ctx.label}: ${val}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { ticks: { color: 'var(--muted)', font: { size: 10 } }, grid: { display: false } },
+                    y: { ticks: { color: 'var(--muted)', font: { size: 10 } }, grid: { color: 'var(--border)' } }
+                }
+            }
+        });
+    }
 }
 
 // ===== UPDATE SEO TITLE =====
