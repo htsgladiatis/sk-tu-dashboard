@@ -250,9 +250,10 @@
     <div class="header">
         <div>
             <h1>🏗️ СК-ТУ — Рекламный дашборд</h1>
-            <div class="subtitle">Яндекс.Директ · 2 кабинета · sk-tu.ru · 22.06–28.06.2026</div>
+            <div class="subtitle" id="subtitle">Яндекс.Директ · 2 кабинета · sk-tu.ru · 22.06–28.06.2026</div>
         </div>
         <div class="period-selector">
+            <button class="period-btn" onclick="showPeriod('w1')">15.06–21.06</button>
             <button class="period-btn active" onclick="showPeriod('w2')">22.06–28.06</button>
             <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙 Тёмная</button>
         </div>
@@ -288,7 +289,7 @@
     </div>
 
     <div class="table-card">
-        <h3 id="detailTableTitle">📋 Детализация за период 22.06–28.06</h3>
+        <h3 id="detailTableTitle">📋 Детализация за период</h3>
         <table id="detailTable"></table>
     </div>
 
@@ -298,68 +299,134 @@
 
 <script>
 // ===== DATA =====
-const week = {
-    id: 'w2',
-    label: '22.06–28.06',
-    from: '22.06.2026',
-    to: '28.06.2026',
-    impressions: 131590,
-    clicks: 3470,
-    spend: 171054.59,
-    leads: 106,
-    target: 21,
-    ctr: 2.64,
-    cpc: 49,
-    cpa: 1614,
-    cpl: 8145,
-    convLead: 3.06,
-    convTarget: 0.61,
-    seo: 0,
-    seoLeads: 0,
-    seoTarget: 0,
-    otherLeads: 93,
-    otherTarget: 14,
-    webmasterClicks: 5392,
-    accounts: {
-        'Кабинет МСК': {
-            imp: 0,
-            clicks: 1398,
-            spend: 110535.40,
-            leads: 8,
-            target: 6,
-            campaigns: [
-                { name: 'ЕПК. Каркас. РСЯ. МСК. OK.', imp: 0, clicks: 418, spend: 21328.24, leads: 0, target: 0 },
-                { name: 'Каркас Гл. Мастер. МСК. OK.', imp: 0, clicks: 156, spend: 16732.31, leads: 2, target: 2 },
-                { name: 'Каркас кат. Мастер. МСК. OK.', imp: 0, clicks: 437, spend: 36267.26, leads: 2, target: 2 },
-                { name: 'Каркас. Поиск. МСК.', imp: 0, clicks: 249, spend: 30747.01, leads: 4, target: 2 },
-                { name: 'Каркас. Ретаргетинг. МСК. OK. 2.', imp: 0, clicks: 49, spend: 3842.80, leads: 0, target: 0 },
-                { name: 'Каркас. Ретаргетирнг. Фид. МСК. OK. 2.', imp: 0, clicks: 89, spend: 1617.78, leads: 0, target: 0 }
-            ]
+const weeks = {
+    w1: {
+        id: 'w1',
+        label: '15.06–21.06',
+        from: '15.06.2026',
+        to: '21.06.2026',
+        impressions: 222824,
+        clicks: 2349,
+        spend: 120365,
+        leads: 79,
+        target: 13,
+        ctr: 1.05,
+        cpc: 51,
+        cpa: 1524,
+        cpl: 9259,
+        convLead: 3.36,
+        convTarget: 0.58,
+        seo: 0,
+        seoLeads: 2,
+        seoTarget: 1,
+        otherLeads: 0,
+        otherTarget: 0,
+        accounts: {
+            'Кабинет СПБ': {
+                imp: 132694,
+                clicks: 1552,
+                spend: 56314.97,
+                leads: 43,
+                target: 1,
+                campaigns: [
+                    { name: 'Каркас. Мастер. СПБ. ОК. gl.', imp: 24194, clicks: 518, spend: 16773.20, leads: 5, target: 0 },
+                    { name: 'Каркас. РСЯ. СПБ. ОК. 06-26.', imp: 79723, clicks: 489, spend: 11867.76, leads: 0, target: 0 },
+                    { name: 'Каркас. Поиск. СПБ. ОК.', imp: 1397, clicks: 218, spend: 22062.00, leads: 1, target: 1 },
+                    { name: 'Копия Каркас. Ретаргетинг. ФИД. СПБ. ОК. 4.', imp: 22551, clicks: 169, spend: 3660.00, leads: 0, target: 0 },
+                    { name: 'Каркас. Мастер. СПБ. CPL. 3.', imp: 4829, clicks: 158, spend: 1952.00, leads: 1, target: 0 }
+                ]
+            },
+            'Кабинет МСК': {
+                imp: 90130,
+                clicks: 797,
+                spend: 64050.00,
+                leads: 25,
+                target: 1,
+                campaigns: [
+                    { name: 'ЕПК. Каркас. РСЯ. МСК. ОК.', imp: 66252, clicks: 236, spend: 12831.84, leads: 1, target: 0 },
+                    { name: 'Каркас. Поиск. МСК.', imp: 4556, clicks: 190, spend: 24085.18, leads: 0, target: 0 },
+                    { name: 'Каркас кат. Мастер. МСК. ОК.', imp: 7251, clicks: 161, spend: 8148.80, leads: 2, target: 0 },
+                    { name: 'Каркас Пл. Мастер. МСК. ОК.', imp: 4464, clicks: 118, spend: 14695.26, leads: 10, target: 1 },
+                    { name: 'Каркас. Ретаргетинг. МСК. ОК. 2.', imp: 3960, clicks: 46, spend: 3658.49, leads: 0, target: 0 },
+                    { name: 'Каркас. Ретаргетинг. Фид. МСК. ОК. 2.', imp: 3647, clicks: 46, spend: 630.43, leads: 0, target: 0 }
+                ]
+            }
         },
-        'Кабинет СПБ': {
-            imp: 0,
-            clicks: 2072,
-            spend: 60519.19,
-            leads: 5,
-            target: 1,
-            campaigns: [
-                { name: 'Каркас. Мастер. СПБ. CPL. 3.', imp: 0, clicks: 213, spend: 2147.20, leads: 2, target: 0 },
-                { name: 'Каркас. Мастер. СПБ. OK. gl.', imp: 0, clicks: 1129, spend: 23159.80, leads: 0, target: 0 },
-                { name: 'Каркас. Поиск. СПБ. OK.', imp: 0, clicks: 206, spend: 19358.32, leads: 2, target: 0 },
-                { name: 'Каркас. РСЯ. СПБ. OK. 06-26.', imp: 0, clicks: 339, spend: 12193.85, leads: 0, target: 0 },
-                { name: 'Копия Каркас. Ретаргетинг. ФИД. СПБ. OK. 4.', imp: 0, clicks: 185, spend: 3660.02, leads: 1, target: 1 }
-            ]
-        }
+        channels: [
+            { name: 'Яндекс Директ', leads: 45, target: 2, spend: 120365 },
+            { name: 'Instagram', leads: 2, target: 0, spend: 0 },
+            { name: 'SEO', leads: 2, target: 1, spend: 0 },
+            { name: 'Рекомендация', leads: 1, target: 1, spend: 0 },
+            { name: 'Классифайды', leads: 1, target: 1, spend: 0 },
+            { name: 'Оффлайн', leads: 7, target: 7, spend: 0 },
+            { name: 'Без источника', leads: 21, target: 0, spend: 0 }
+        ]
     },
-    channels: [
-        { name: 'Яндекс Директ', leads: 16, target: 8, spend: 171054.59 },
-        { name: 'Выставочный дом', leads: 11, target: 11, spend: 0 },
-        { name: 'Instagram', leads: 1, target: 1, spend: 0 },
-        { name: 'Сарафан', leads: 1, target: 1, spend: 0 },
-        { name: 'SEO', leads: 0, target: 0, spend: 0 },
-        { name: 'Без источника', leads: 77, target: 0, spend: 0 }
-    ]
+    w2: {
+        id: 'w2',
+        label: '22.06–28.06',
+        from: '22.06.2026',
+        to: '28.06.2026',
+        impressions: 131590,
+        clicks: 3470,
+        spend: 171054.59,
+        leads: 106,
+        target: 21,
+        ctr: 2.64,
+        cpc: 49,
+        cpa: 1614,
+        cpl: 8145,
+        convLead: 3.06,
+        convTarget: 0.61,
+        seo: 0,
+        seoLeads: 0,
+        seoTarget: 0,
+        otherLeads: 93,
+        otherTarget: 14,
+        webmasterClicks: 5392,
+        accounts: {
+            'Кабинет МСК': {
+                imp: 0,
+                clicks: 1398,
+                spend: 110535.40,
+                leads: 8,
+                target: 6,
+                campaigns: [
+                    { name: 'ЕПК. Каркас. РСЯ. МСК. OK.', imp: 0, clicks: 418, spend: 21328.24, leads: 0, target: 0 },
+                    { name: 'Каркас Гл. Мастер. МСК. OK.', imp: 0, clicks: 156, spend: 16732.31, leads: 2, target: 2 },
+                    { name: 'Каркас кат. Мастер. МСК. OK.', imp: 0, clicks: 437, spend: 36267.26, leads: 2, target: 2 },
+                    { name: 'Каркас. Поиск. МСК.', imp: 0, clicks: 249, spend: 30747.01, leads: 4, target: 2 },
+                    { name: 'Каркас. Ретаргетинг. МСК. OK. 2.', imp: 0, clicks: 49, spend: 3842.80, leads: 0, target: 0 },
+                    { name: 'Каркас. Ретаргетирнг. Фид. МСК. OK. 2.', imp: 0, clicks: 89, spend: 1617.78, leads: 0, target: 0 }
+                ]
+            },
+            'Кабинет СПБ': {
+                imp: 0,
+                clicks: 2072,
+                spend: 60519.19,
+                leads: 5,
+                target: 1,
+                campaigns: [
+                    { name: 'Каркас. Мастер. СПБ. CPL. 3.', imp: 0, clicks: 213, spend: 2147.20, leads: 2, target: 0 },
+                    { name: 'Каркас. Мастер. СПБ. OK. gl.', imp: 0, clicks: 1129, spend: 23159.80, leads: 0, target: 0 },
+                    { name: 'Каркас. Поиск. СПБ. OK.', imp: 0, clicks: 206, spend: 19358.32, leads: 2, target: 0 },
+                    { name: 'Каркас. РСЯ. СПБ. OK. 06-26.', imp: 0, clicks: 339, spend: 12193.85, leads: 0, target: 0 },
+                    { name: 'Копия Каркас. Ретаргетинг. ФИД. СПБ. OK. 4.', imp: 0, clicks: 185, spend: 3660.02, leads: 1, target: 1 }
+                ]
+            }
+        },
+        channels: [
+            { name: 'Яндекс Директ', leads: 16, target: 8, spend: 171054.59 },
+            { name: 'Выставочный дом', leads: 11, target: 11, spend: 0 },
+            { name: 'Instagram', leads: 1, target: 1, spend: 0 },
+            { name: 'Сарафан', leads: 1, target: 1, spend: 0 },
+            { name: 'SEO', leads: 0, target: 0, spend: 0 },
+            { name: 'Без источника', leads: 77, target: 0, spend: 0 }
+        ]
+    }
 };
+
+let currentWeek = 'w2';
 
 // ===== HELPERS =====
 function fmt(n) {
@@ -853,10 +920,25 @@ function renderSearchQueries(tbodyId, queries) {
     }).join('');
 }
 
-function showPeriod(period) {
-    renderKPI(week);
-    initCharts(week);
-    renderDetailTable(week);
+function showPeriod(periodId) {
+    currentWeek = periodId;
+    const w = weeks[periodId];
+    
+    // Update subtitle
+    document.getElementById('subtitle').textContent = `Яндекс.Директ · 2 кабинета · sk-tu.ru · ${w.from}–${w.to.split('.')[0]}.${w.to.split('.')[1]}.2026`;
+    
+    // Update detail table title
+    document.getElementById('detailTableTitle').textContent = `📋 Детализация за период ${w.from}–${w.to.split('.')[0]}.${w.to.split('.')[1]}`;
+    
+    // Update active button
+    document.querySelectorAll('.period-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    
+    renderKPI(w);
+    initCharts(w);
+    renderDetailTable(w);
 }
 
 function toggleTheme() {
@@ -872,7 +954,7 @@ function toggleTheme() {
         btn.innerHTML = '☀️ Светлая';
         localStorage.setItem('theme', 'dark');
     }
-    initCharts(week);
+    initCharts(weeks[currentWeek]);
 }
 
 // ===== INIT =====
@@ -881,9 +963,9 @@ if (savedTheme === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
     document.getElementById('themeToggle').innerHTML = '☀️ Светлая';
 }
-renderKPI(week);
-initCharts(week);
-renderDetailTable(week);
+renderKPI(weeks[currentWeek]);
+initCharts(weeks[currentWeek]);
+renderDetailTable(weeks[currentWeek]);
 </script>
 </body>
 </html>
