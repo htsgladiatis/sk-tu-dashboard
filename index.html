@@ -293,6 +293,30 @@
         <table id="detailTable"></table>
     </div>
 
+    <!-- SEO Блоки -->
+    <div style="margin-top: 32px;">
+        <h2 style="font-size: 22px; margin-bottom: 24px; color: var(--text);">🔍 SEO Аналитика (органический трафик)</h2>
+    </div>
+
+    <div class="charts-grid" style="grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));">
+        <div class="chart-card">
+            <h3>📊 Топ посадочных страниц (SEO)</h3>
+            <div style="max-height: 400px; overflow-y: auto;">
+                <table id="topPagesTable" style="font-size: 12px;">
+                    <thead>
+                        <tr style="position: sticky; top: 0; background: var(--card); z-index: 1;">
+                            <th style="text-align: left; padding: 8px;">Страница</th>
+                            <th style="text-align: right; padding: 8px;">Клики</th>
+                            <th style="text-align: right; padding: 8px;">Показы</th>
+                            <th style="text-align: right; padding: 8px;">CTR</th>
+                        </tr>
+                    </thead>
+                    <tbody id="topPagesBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <div class="footer">
         СК-ТУ · Автоматизация отчётов · sk-tu.ru
     </div>
@@ -360,7 +384,8 @@ const weeks = {
             { name: 'Классифайды', leads: 1, target: 1, spend: 0 },
             { name: 'Оффлайн', leads: 7, target: 7, spend: 0 },
             { name: 'Без источника', leads: 21, target: 0, spend: 0 }
-        ]
+        ],
+        topPages: []
     },
     w2: {
         id: 'w2',
@@ -422,6 +447,18 @@ const weeks = {
             { name: 'Сарафан', leads: 1, target: 1, spend: 0 },
             { name: 'SEO', leads: 0, target: 0, spend: 0 },
             { name: 'Без источника', leads: 77, target: 2, spend: 0 }
+        ],
+        topPages: [
+            { url: "/catalog/karkasnye-doma/", domain: "sk-tu.ru", impressions: 17343, clicks: 998, ctr: 5.75 },
+            { url: "/catalog/karkasnye-doma/odnoetazhnye/", domain: "msk.sk-tu.ru", impressions: 30860, clicks: 765, ctr: 2.48 },
+            { url: "/articles/stroitelstvo/pravila-razmeshcheniya-stroeniy-na-zemelnom-uchastke-v-2026-polnoe-rukovodstvo-dlya-izhs-i-snt/", domain: "msk.sk-tu.ru", impressions: 10412, clicks: 509, ctr: 4.89 },
+            { url: "/catalog/karkasnye-doma/", domain: "msk.sk-tu.ru", impressions: 22323, clicks: 430, ctr: 1.93 },
+            { url: "/catalog/karkasnye-doma/100-150m2/", domain: "sk-tu.ru", impressions: 2290, clicks: 206, ctr: 9.00 },
+            { url: "/catalog/karkasnye-doma/odnoetazhnye/", domain: "sk-tu.ru", impressions: 2328, clicks: 179, ctr: 7.69 },
+            { url: "/", domain: "msk.sk-tu.ru", impressions: 6562, clicks: 161, ctr: 2.45 },
+            { url: "/catalog/karkasnye-doma/dvuhetazhnye/", domain: "msk.sk-tu.ru", impressions: 2116, clicks: 142, ctr: 6.71 },
+            { url: "/catalog/karkasnye-doma/dvuhetazhnye/", domain: "sk-tu.ru", impressions: 1696, clicks: 129, ctr: 7.61 },
+            { url: "/catalog/karkasnye-doma/100-150m2/", domain: "msk.sk-tu.ru", impressions: 4871, clicks: 110, ctr: 2.26 }
         ]
     }
 };
@@ -735,6 +772,32 @@ function renderDetailTable(w) {
     table.innerHTML = html;
 }
 
+// ===== TOP PAGES TABLE =====
+function renderTopPages(w) {
+    const tbody = document.getElementById('topPagesBody');
+    if (!w.topPages || w.topPages.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px; color: var(--muted);">Нет данных за этот период</td></tr>';
+        return;
+    }
+
+    let html = '';
+    w.topPages.forEach((page, idx) => {
+        const shortUrl = page.url.length > 60 ? page.url.substring(0, 57) + '...' : page.url;
+        const domain = page.domain === 'sk-tu.ru' ? 'СПБ' : 'МСК';
+        html += `<tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 8px;">
+                <div style="font-size: 11px; color: var(--muted); margin-bottom: 2px;">${idx + 1}. ${domain}</div>
+                <div style="font-size: 12px; word-break: break-all;">${shortUrl}</div>
+            </td>
+            <td style="text-align: right; padding: 8px; font-weight: 600;">${fmt(page.clicks)}</td>
+            <td style="text-align: right; padding: 8px; color: var(--muted);">${fmt(page.impressions)}</td>
+            <td style="text-align: right; padding: 8px; color: var(--green);">${page.ctr.toFixed(2)}%</td>
+        </tr>`;
+    });
+
+    tbody.innerHTML = html;
+}
+
 // ===== SEO DATA =====
 const seoDataSpb = {
     stats: {
@@ -939,6 +1002,7 @@ function showPeriod(periodId) {
     renderKPI(w);
     initCharts(w);
     renderDetailTable(w);
+    renderTopPages(w);
 }
 
 function toggleTheme() {
@@ -966,6 +1030,7 @@ if (savedTheme === 'dark') {
 renderKPI(weeks[currentWeek]);
 initCharts(weeks[currentWeek]);
 renderDetailTable(weeks[currentWeek]);
+renderTopPages(weeks[currentWeek]);
 </script>
 </body>
 </html>
