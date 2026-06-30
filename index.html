@@ -874,34 +874,28 @@ function renderSeoChart(w) {
 
     const spb = w.seoStats.spb;
     const msk = w.seoStats.msk;
+    const total = {
+        visits: spb.visits + msk.visits,
+        users: spb.users + msk.users,
+        pageDepth: ((spb.pageDepth * spb.visits + msk.pageDepth * msk.visits) / (spb.visits + msk.visits)),
+        avgDuration: Math.round((spb.avgDuration * spb.visits + msk.avgDuration * msk.visits) / (spb.visits + msk.visits))
+    };
 
     chartInstances.seoPerformance = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: ['Визиты', 'Пользователи', 'Глубина', 'Время (сек)'],
-            datasets: [
-                {
-                    label: 'СПБ (sk-tu.ru)',
-                    data: [spb.visits, spb.users, spb.pageDepth * 100, spb.avgDuration],
-                    backgroundColor: '#3b82f6',
-                    borderRadius: 4
-                },
-                {
-                    label: 'МСК (msk.sk-tu.ru)',
-                    data: [msk.visits, msk.users, msk.pageDepth * 100, msk.avgDuration],
-                    backgroundColor: '#22c55e',
-                    borderRadius: 4
-                }
-            ]
+            datasets: [{
+                data: [total.visits, total.users, total.pageDepth * 100, total.avgDuration],
+                backgroundColor: ['#22c55e', '#3b82f6', '#a855f7', '#f97316'],
+                borderRadius: 4
+            }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: { 
-                    position: 'bottom',
-                    labels: { color: 'var(--text)', padding: 12, font: { size: 11 } } 
-                },
+                legend: { display: false },
                 tooltip: {
                     backgroundColor: 'var(--card)',
                     titleColor: 'var(--text)',
@@ -912,13 +906,13 @@ function renderSeoChart(w) {
                         label: (ctx) => {
                             let val = ctx.parsed.y;
                             if (ctx.label === 'Глубина') val = (val / 100).toFixed(2);
-                            return `${ctx.dataset.label}: ${val}`;
+                            return `${ctx.label}: ${val}`;
                         }
                     }
                 }
             },
             scales: {
-                x: { ticks: { color: 'var(--muted)', font: { size: 10 } }, grid: { color: 'var(--border)' } },
+                x: { ticks: { color: 'var(--muted)', font: { size: 10 } }, grid: { display: false } },
                 y: { ticks: { color: 'var(--muted)', font: { size: 10 } }, grid: { color: 'var(--border)' } }
             }
         }
