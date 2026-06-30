@@ -295,23 +295,42 @@
 
     <!-- SEO Блоки -->
     <div style="margin-top: 32px;">
-        <h2 style="font-size: 22px; margin-bottom: 24px; color: var(--text);">🔍 SEO Аналитика (органический трафик)</h2>
+        <h2 style="font-size: 22px; margin-bottom: 24px; color: var(--text);">🔍 SEO Аналитика — <span id="seoTitle"></span></h2>
     </div>
 
-    <div class="charts-grid" style="grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));">
+    <div class="charts-grid" style="grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));">
         <div class="chart-card">
-            <h3>📊 Топ посадочных страниц (SEO)</h3>
-            <div style="max-height: 400px; overflow-y: auto;">
-                <table id="topPagesTable" style="font-size: 12px;">
+            <h3>📊 SEO Performance (органический трафик)</h3>
+            <div class="chart-container"><canvas id="seoPerformanceChart"></canvas></div>
+        </div>
+
+        <div class="chart-card">
+            <h3>📄 Топ посадочных страниц (SEO)</h3>
+            <div style="max-height: 320px; overflow-y: auto;">
+                <table id="topPagesTable" style="font-size: 11px;">
                     <thead>
                         <tr style="position: sticky; top: 0; background: var(--card); z-index: 1;">
-                            <th style="text-align: left; padding: 8px;">Страница</th>
-                            <th style="text-align: right; padding: 8px;">Клики</th>
-                            <th style="text-align: right; padding: 8px;">Показы</th>
-                            <th style="text-align: right; padding: 8px;">CTR</th>
+                            <th style="text-align: left; padding: 6px;">Страница</th>
+                            <th style="text-align: right; padding: 6px;">Клики</th>
+                            <th style="text-align: right; padding: 6px;">Показы</th>
                         </tr>
                     </thead>
                     <tbody id="topPagesBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <h3>🔎 Топ поисковых запросов</h3>
+            <div style="max-height: 320px; overflow-y: auto;">
+                <table id="topQueriesTable" style="font-size: 11px;">
+                    <thead>
+                        <tr style="position: sticky; top: 0; background: var(--card); z-index: 1;">
+                            <th style="text-align: left; padding: 6px;">Запрос</th>
+                            <th style="text-align: right; padding: 6px;">Визиты</th>
+                        </tr>
+                    </thead>
+                    <tbody id="topQueriesBody"></tbody>
                 </table>
             </div>
         </div>
@@ -459,7 +478,12 @@ const weeks = {
             { url: "/catalog/karkasnye-doma/dvuhetazhnye/", domain: "msk.sk-tu.ru", impressions: 2116, clicks: 142, ctr: 6.71 },
             { url: "/catalog/karkasnye-doma/dvuhetazhnye/", domain: "sk-tu.ru", impressions: 1696, clicks: 129, ctr: 7.61 },
             { url: "/catalog/karkasnye-doma/100-150m2/", domain: "msk.sk-tu.ru", impressions: 4871, clicks: 110, ctr: 2.26 }
-        ]
+        ],
+        seoStats: {
+            spb: { visits: 2579, users: 2100, pageDepth: 2.8, avgDuration: 145 },
+            msk: { visits: 2813, users: 2300, pageDepth: 3.1, avgDuration: 160 }
+        },
+        topQueries: []
     }
 };
 
@@ -776,26 +800,124 @@ function renderDetailTable(w) {
 function renderTopPages(w) {
     const tbody = document.getElementById('topPagesBody');
     if (!w.topPages || w.topPages.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px; color: var(--muted);">Нет данных за этот период</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 20px; color: var(--muted);">Нет данных за этот период</td></tr>';
         return;
     }
 
     let html = '';
-    w.topPages.forEach((page, idx) => {
-        const shortUrl = page.url.length > 60 ? page.url.substring(0, 57) + '...' : page.url;
+    w.topPages.slice(0, 10).forEach((page, idx) => {
+        const shortUrl = page.url.length > 50 ? page.url.substring(0, 47) + '...' : page.url;
         const domain = page.domain === 'sk-tu.ru' ? 'СПБ' : 'МСК';
         html += `<tr style="border-bottom: 1px solid var(--border);">
-            <td style="padding: 8px;">
-                <div style="font-size: 11px; color: var(--muted); margin-bottom: 2px;">${idx + 1}. ${domain}</div>
-                <div style="font-size: 12px; word-break: break-all;">${shortUrl}</div>
+            <td style="padding: 6px;">
+                <div style="font-size: 10px; color: var(--muted); margin-bottom: 2px;">${idx + 1}. ${domain}</div>
+                <div style="font-size: 11px; word-break: break-all;">${shortUrl}</div>
             </td>
-            <td style="text-align: right; padding: 8px; font-weight: 600;">${fmt(page.clicks)}</td>
-            <td style="text-align: right; padding: 8px; color: var(--muted);">${fmt(page.impressions)}</td>
-            <td style="text-align: right; padding: 8px; color: var(--green);">${page.ctr.toFixed(2)}%</td>
+            <td style="text-align: right; padding: 6px; font-weight: 600;">${fmt(page.clicks)}</td>
+            <td style="text-align: right; padding: 6px; color: var(--muted); font-size: 11px;">${fmt(page.impressions)}</td>
         </tr>`;
     });
 
     tbody.innerHTML = html;
+}
+
+// ===== TOP QUERIES TABLE =====
+function renderTopQueries(w) {
+    const tbody = document.getElementById('topQueriesBody');
+    if (!w.topQueries || w.topQueries.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="2" style="text-align: center; padding: 20px; color: var(--muted);">Нет данных за этот период</td></tr>';
+        return;
+    }
+
+    let html = '';
+    w.topQueries.slice(0, 10).forEach((q, idx) => {
+        html += `<tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 6px;">
+                <div style="font-size: 11px;">${idx + 1}. ${q.query}</div>
+            </td>
+            <td style="text-align: right; padding: 6px; font-weight: 600;">${q.visits}</td>
+        </tr>`;
+    });
+
+    tbody.innerHTML = html;
+}
+
+// ===== SEO PERFORMANCE CHART =====
+function renderSeoChart(w) {
+    const canvas = document.getElementById('seoPerformanceChart');
+    const ctx = canvas.getContext('2d');
+    
+    // Уничтожаем предыдущий график
+    if (chartInstances.seoPerformance) {
+        chartInstances.seoPerformance.destroy();
+    }
+
+    if (!w.seoStats) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.font = '14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+        ctx.fillStyle = 'var(--muted)';
+        ctx.textAlign = 'center';
+        ctx.fillText('Нет данных за этот период', canvas.width / 2, canvas.height / 2);
+        return;
+    }
+
+    const spb = w.seoStats.spb;
+    const msk = w.seoStats.msk;
+
+    chartInstances.seoPerformance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Визиты', 'Пользователи', 'Глубина', 'Время (сек)'],
+            datasets: [
+                {
+                    label: 'СПБ (sk-tu.ru)',
+                    data: [spb.visits, spb.users, spb.pageDepth * 100, spb.avgDuration],
+                    backgroundColor: '#3b82f6',
+                    borderRadius: 4
+                },
+                {
+                    label: 'МСК (msk.sk-tu.ru)',
+                    data: [msk.visits, msk.users, msk.pageDepth * 100, msk.avgDuration],
+                    backgroundColor: '#22c55e',
+                    borderRadius: 4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { 
+                    position: 'bottom',
+                    labels: { color: 'var(--text)', padding: 12, font: { size: 11 } } 
+                },
+                tooltip: {
+                    backgroundColor: 'var(--card)',
+                    titleColor: 'var(--text)',
+                    bodyColor: 'var(--text)',
+                    borderColor: 'var(--border)',
+                    borderWidth: 1,
+                    callbacks: {
+                        label: (ctx) => {
+                            let val = ctx.parsed.y;
+                            if (ctx.label === 'Глубина') val = (val / 100).toFixed(2);
+                            return `${ctx.dataset.label}: ${val}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: { ticks: { color: 'var(--muted)', font: { size: 10 } }, grid: { color: 'var(--border)' } },
+                y: { ticks: { color: 'var(--muted)', font: { size: 10 } }, grid: { color: 'var(--border)' } }
+            }
+        }
+    });
+}
+
+// ===== UPDATE SEO TITLE =====
+function updateSeoTitle(w) {
+    const title = document.getElementById('seoTitle');
+    title.textContent = `${w.from} — ${w.to}`;
 }
 
 // ===== SEO DATA =====
@@ -1003,6 +1125,9 @@ function showPeriod(periodId) {
     initCharts(w);
     renderDetailTable(w);
     renderTopPages(w);
+    renderTopQueries(w);
+    renderSeoChart(w);
+    updateSeoTitle(w);
 }
 
 function toggleTheme() {
@@ -1031,6 +1156,9 @@ renderKPI(weeks[currentWeek]);
 initCharts(weeks[currentWeek]);
 renderDetailTable(weeks[currentWeek]);
 renderTopPages(weeks[currentWeek]);
+renderTopQueries(weeks[currentWeek]);
+renderSeoChart(weeks[currentWeek]);
+updateSeoTitle(weeks[currentWeek]);
 </script>
 </body>
 </html>
