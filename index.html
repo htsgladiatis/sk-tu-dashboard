@@ -255,6 +255,7 @@
         <div class="period-selector">
             <button class="period-btn" onclick="showPeriod('w1')">15.06–21.06</button>
             <button class="period-btn active" onclick="showPeriod('w2')">22.06–28.06</button>
+            <button class="period-btn" onclick="showPeriod('w3')">29.06–05.07</button>
             <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙 Тёмная</button>
         </div>
     </div>
@@ -619,6 +620,87 @@ const weeks = {
             { query: 'проектирование каркасных домов', visits: 3 }
         ],
         topQueries: []
+    },
+    w3: {
+        id: 'w3',
+        label: '29.06–05.07',
+        from: '29.06.2026',
+        to: '05.07.2026',
+        impressions: 141061,
+        clicks: 1917,
+        spend: 91921.7,
+        leads: 125,
+        target: 45,
+        ctr: 1.36,
+        cpc: 47.95,
+        cpa: 735,
+        cpl: 2043,
+        convLead: 6.52,
+        convTarget: 2.35,
+        seo: 0,
+        seoLeads: 0,
+        seoTarget: 0,
+        otherLeads: 80,
+        otherTarget: 0,
+        webmasterClicks: 3791,
+        accounts: {
+            'Кабинет МСК': {
+                imp: 5000,
+                clicks: 1013,
+                spend: 47919.25,
+                leads: 0,
+                target: 0,
+                campaigns: []
+            },
+            'Кабинет СПБ': {
+                imp: 4000,
+                clicks: 904,
+                spend: 44002.45,
+                leads: 0,
+                target: 0,
+                campaigns: []
+            }
+        },
+        channels: [
+            { name: 'Яндекс Директ', leads: 15, target: 7, spend: 91921.7 },
+            { name: 'Выставочный дом', leads: 15, target: 12, spend: 0 },
+            { name: 'Instagram', leads: 3, target: 2, spend: 0 },
+            { name: 'Входящие звонки', leads: 15, target: 5, spend: 0 },
+            { name: 'Прямые заходы', leads: 15, target: 3, spend: 0 },
+            { name: 'Сарафан', leads: 2, target: 1, spend: 0 },
+            { name: 'Без источника', leads: 60, target: 15, spend: 0 }
+        ],
+        topPages: [],
+        seoStats: {
+            spb: { visits: 1441, users: 1150, pageDepth: 2.8, avgDuration: 150 },
+            msk: { visits: 2350, users: 1880, pageDepth: 3.0, avgDuration: 160 }
+        },
+        topPagesSpb: [
+            { url: "/catalog/karkasnye-doma/", impressions: 19311, clicks: 426 },
+            { url: "/catalog/karkasnye-doma/odnoetazhnye/", impressions: 1886, clicks: 95 },
+            { url: "/catalog/karkasnye-doma/100-150m2/", impressions: 1933, clicks: 86 },
+            { url: "/", impressions: 1876, clicks: 64 },
+            { url: "/catalog/karkasnye-doma/dvuhetazhnye/", impressions: 1329, clicks: 64 },
+            { url: "/articles/stroitelstvo/pravila-razmeshcheniya-stroeniy-na-zemelnom-uchastke-v-2026-polnoe-rukovodstvo-dlya-izhs-i-snt/", impressions: 784, clicks: 41 },
+            { url: "/calculator/", impressions: 677, clicks: 37 },
+            { url: "/catalog/karkasnye-doma/s-mansardoy/", impressions: 504, clicks: 34 },
+            { url: "/catalog/karkasnye-doma/s-terrasoj/", impressions: 414, clicks: 39 },
+            { url: "/articles/fundamenty/ustroystvo-uteplennoy-otmostki-polnoe-rukovodstvo-po-montazhu-svoimi-rukami/", impressions: 1259, clicks: 25 }
+        ],
+        topPagesMsk: [
+            { url: "/catalog/karkasnye-doma/odnoetazhnye/", impressions: 43738, clicks: 600 },
+            { url: "/articles/stroitelstvo/pravila-razmeshcheniya-stroeniy-na-zemelnom-uchastke-v-2026-polnoe-rukovodstvo-dlya-izhs-i-snt/", impressions: 7801, clicks: 378 },
+            { url: "/catalog/karkasnye-doma/", impressions: 16256, clicks: 250 },
+            { url: "/", impressions: 5403, clicks: 143 },
+            { url: "/catalog/karkasnye-doma/100-150m2/", impressions: 6229, clicks: 117 },
+            { url: "/catalog/karkasnye-doma/dvuhetazhnye/", impressions: 2593, clicks: 111 },
+            { url: "/catalog/karkasnye-doma/s-terrasoj/", impressions: 991, clicks: 104 },
+            { url: "/calculator/", impressions: 1457, clicks: 93 },
+            { url: "/catalog/karkasnye-doma/s-mansardoy/", impressions: 473, clicks: 50 },
+            { url: "/catalog/karkasnye-doma/barnkhaus/", impressions: 1198, clicks: 43 }
+        ],
+        topQueriesSpb: [],
+        topQueriesMsk: []
     }
 };
 
@@ -1326,8 +1408,10 @@ function showPeriod(periodId) {
     // Update active button
     document.querySelectorAll('.period-btn').forEach(btn => {
         btn.classList.remove('active');
+        if (btn.textContent.includes(w.label)) {
+            btn.classList.add('active');
+        }
     });
-    event.target.classList.add('active');
     
     renderKPI(w);
     initCharts(w);
