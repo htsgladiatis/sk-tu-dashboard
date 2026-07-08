@@ -292,6 +292,7 @@
     <div class="table-card">
         <h3 id="detailTableTitle">📋 Детализация за период</h3>
         <table id="detailTable"></table>
+        <p style="font-size:11px; color: var(--muted); margin-top: 10px; line-height: 1.5;">⚠ <b>Методика показов.</b> Для <b>w1</b> (15–21.06) показы — реальные данные Яндекс.Директ API (источники <code>source_1_yandex_direct.json</code> и <code>source_2_yandex_direct_msk.json</code>). Для <b>w2</b> и <b>w3</b> показы по кабинетам и РК — <b>оценка</b> по среднему CTR w1 (СПБ 1.17%, МСК 0.88%); формула: <code>imp = clicks × (impressions<sub>w1</sub> / clicks<sub>w1</sub>)</code>. В исходных CSV-выгрузках Яндекс Директа за 22.06–05.07 колонка «Показы» отсутствует (отчёт «По объявлениям/группам»). Для точных значений загрузите отчёт «Стандартный по кампаниям» через кабинет Директа.</p>
     </div>
 
     <!-- SEO Блоки -->
@@ -510,12 +511,12 @@ const weeks = {
         label: '22.06–28.06',
         from: '22.06.2026',
         to: '28.06.2026',
-        impressions: 131590,
+        impressions: 335255,
         clicks: 3470,
         spend: 171054.59,
         leads: 106,
         target: 21,
-        ctr: 2.64,
+    ctr: 1.12,
         cpc: 49,
         cpa: 1614,
         cpl: 8145,
@@ -529,32 +530,32 @@ const weeks = {
         webmasterClicks: 5392,
         accounts: {
             'Кабинет МСК': {
-                imp: 0,
+                imp: 165289,
                 clicks: 1398,
                 spend: 110535.40,
                 leads: 8,
                 target: 4,
                 campaigns: [
-                    { name: 'ЕПК. Каркас. РСЯ. МСК. OK.', imp: 0, clicks: 418, spend: 21328.24, leads: 0, target: 0 },
-                    { name: 'Каркас Гл. Мастер. МСК. OK.', imp: 0, clicks: 156, spend: 16732.31, leads: 2, target: 1 },
-                    { name: 'Каркас кат. Мастер. МСК. OK.', imp: 0, clicks: 437, spend: 36267.26, leads: 2, target: 1 },
-                    { name: 'Каркас. Поиск. МСК.', imp: 0, clicks: 249, spend: 30747.01, leads: 4, target: 2 },
-                    { name: 'Каркас. Ретаргетинг. МСК. OK. 2.', imp: 0, clicks: 49, spend: 3842.80, leads: 0, target: 0 },
-                    { name: 'Каркас. Ретаргетирнг. Фид. МСК. OK. 2.', imp: 0, clicks: 89, spend: 1617.78, leads: 0, target: 0 }
+                    { name: 'ЕПК. Каркас. РСЯ. МСК. OK.', imp: 123905, clicks: 418, spend: 21328.24, leads: 0, target: 0 },
+                    { name: 'Каркас Гл. Мастер. МСК. OK.', imp: 5274, clicks: 156, spend: 16732.31, leads: 2, target: 1 },
+                    { name: 'Каркас кат. Мастер. МСК. OK.', imp: 18703, clicks: 437, spend: 36267.26, leads: 2, target: 1 },
+                    { name: 'Каркас. Поиск. МСК.', imp: 7852, clicks: 249, spend: 30747.01, leads: 4, target: 2 },
+                    { name: 'Каркас. Ретаргетинг. МСК. OK. 2.', imp: 4881, clicks: 49, spend: 3842.80, leads: 0, target: 0 },
+                    { name: 'Каркас. Ретаргетирнг. Фид. МСК. OK. 2.', imp: 4674, clicks: 89, spend: 1617.78, leads: 0, target: 0 }
                 ]
             },
             'Кабинет СПБ': {
-                imp: 0,
+                imp: 144375,
                 clicks: 2072,
                 spend: 60519.19,
                 leads: 5,
                 target: 2,
                 campaigns: [
-                    { name: 'Каркас. Мастер. СПБ. CPL. 3.', imp: 0, clicks: 213, spend: 2147.20, leads: 2, target: 0 },
-                    { name: 'Каркас. Мастер. СПБ. OK. gl.', imp: 0, clicks: 1129, spend: 23159.80, leads: 0, target: 1 },
-                    { name: 'Каркас. Поиск. СПБ. OK.', imp: 0, clicks: 206, spend: 19358.32, leads: 2, target: 0 },
-                    { name: 'Каркас. РСЯ. СПБ. OK. 06-26.', imp: 0, clicks: 339, spend: 12193.85, leads: 0, target: 0 },
-                    { name: 'Копия Каркас. Ретаргетинг. ФИД. СПБ. OK. 4.', imp: 0, clicks: 185, spend: 3660.02, leads: 1, target: 1 }
+                    { name: 'Каркас. Мастер. СПБ. CPL. 3.', imp: 6166, clicks: 213, spend: 2147.20, leads: 2, target: 0 },
+                    { name: 'Каркас. Мастер. СПБ. OK. gl.', imp: 47024, clicks: 1129, spend: 23159.80, leads: 0, target: 1 },
+                    { name: 'Каркас. Поиск. СПБ. OK.', imp: 1223, clicks: 206, spend: 19358.32, leads: 2, target: 0 },
+                    { name: 'Каркас. РСЯ. СПБ. OK. 06-26.', imp: 71297, clicks: 339, spend: 12193.85, leads: 0, target: 0 },
+                    { name: 'Копия Каркас. Ретаргетинг. ФИД. СПБ. OK. 4.', imp: 18665, clicks: 185, spend: 3660.02, leads: 1, target: 1 }
                 ]
             }
         },
@@ -626,12 +627,12 @@ const weeks = {
         label: '29.06–05.07',
         from: '29.06.2026',
         to: '05.07.2026',
-        impressions: 141061,
+        impressions: 461675,
         clicks: 4910,
         spend: 199955.47,
         leads: 125,
         target: 35,
-        ctr: 3.48,
+        ctr: 1.06,
         cpc: 40.72,
         cpa: 1600,
         cpl: 5713,
@@ -645,32 +646,32 @@ const weeks = {
         webmasterClicks: 3791,
         accounts: {
             'Кабинет МСК': {
-                imp: 0,
+                imp: 278937,
                 clicks: 1517,
                 spend: 122000.00,
                 leads: 7,
                 target: 3,
                 campaigns: [
-                    { name: 'Каркас кат. Мастер. МСК. OK.', imp: 0, clicks: 608, spend: 61713.36, leads: 7, target: 3 },
-                    { name: 'ЕПК. Каркас. РСЯ. МСК. OK.', imp: 0, clicks: 679, spend: 33118.25, leads: 0, target: 0 },
-                    { name: 'Каркас Гл. Мастер. МСК. OK.', imp: 0, clicks: 97, spend: 15796.45, leads: 0, target: 0 },
-                    { name: 'Каркас. Поиск. МСК.', imp: 0, clicks: 76, spend: 8103.23, leads: 0, target: 0 },
-                    { name: 'Каркас. Ретаргетинг. МСК. OK. 2.', imp: 0, clicks: 42, spend: 3142.59, leads: 0, target: 0 },
-                    { name: 'Каркас. Ретаргетирнг. Фид. МСК. OK. 2.', imp: 0, clicks: 15, spend: 126.12, leads: 0, target: 0 }
+                    { name: 'Каркас кат. Мастер. МСК. OK.', imp: 16023, clicks: 608, spend: 61713.36, leads: 7, target: 3 },
+                    { name: 'ЕПК. Каркас. РСЯ. МСК. OK.', imp: 252605, clicks: 679, spend: 33118.25, leads: 0, target: 0 },
+                    { name: 'Каркас Гл. Мастер. МСК. OK.', imp: 1943, clicks: 97, spend: 15796.45, leads: 0, target: 0 },
+                    { name: 'Каркас. Поиск. МСК.', imp: 2649, clicks: 76, spend: 8103.23, leads: 0, target: 0 },
+                    { name: 'Каркас. Ретаргетинг. МСК. OK. 2.', imp: 4823, clicks: 42, spend: 3142.59, leads: 0, target: 0 },
+                    { name: 'Каркас. Ретаргетирнг. Фид. МСК. OK. 2.', imp: 894, clicks: 15, spend: 126.12, leads: 0, target: 0 }
                 ]
             },
             'Кабинет СПБ': {
-                imp: 0,
+                imp: 227771,
                 clicks: 3393,
                 spend: 77955.47,
                 leads: 11,
                 target: 2,
                 campaigns: [
-                    { name: 'Каркас. Мастер. СПБ. OK. gl.', imp: 0, clicks: 2286, spend: 36811.28, leads: 6, target: 2 },
-                    { name: 'Каркас. Поиск. СПБ. OK.', imp: 0, clicks: 198, spend: 19194.71, leads: 2, target: 0 },
-                    { name: 'Каркас. РСЯ. СПБ. OK. 06-26.', imp: 0, clicks: 393, spend: 12070.26, leads: 0, target: 0 },
-                    { name: 'Каркас. Мастер. СПБ. CPL. 3.', imp: 0, clicks: 331, spend: 6234.20, leads: 3, target: 0 },
-                    { name: 'Копия Каркас. Ретаргетинг. ФИД. СПБ. OK. 4.', imp: 0, clicks: 185, spend: 3645.02, leads: 0, target: 0 }
+                    { name: 'Каркас. Мастер. СПБ. OK. gl.', imp: 79742, clicks: 2286, spend: 36811.28, leads: 6, target: 2 },
+                    { name: 'Каркас. Поиск. СПБ. OK.', imp: 1252, clicks: 198, spend: 19194.71, leads: 2, target: 0 },
+                    { name: 'Каркас. РСЯ. СПБ. OK. 06-26.', imp: 112439, clicks: 393, spend: 12070.26, leads: 0, target: 0 },
+                    { name: 'Каркас. Мастер. СПБ. CPL. 3.', imp: 11210, clicks: 331, spend: 6234.20, leads: 3, target: 0 },
+                    { name: 'Копия Каркас. Ретаргетинг. ФИД. СПБ. OK. 4.', imp: 23128, clicks: 185, spend: 3645.02, leads: 0, target: 0 }
                 ]
             }
         },
