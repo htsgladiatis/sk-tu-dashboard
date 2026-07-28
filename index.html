@@ -250,12 +250,12 @@
     <div class="header">
         <div>
             <h1>🏗️ СК-ТУ — Рекламный дашборд</h1>
-            <div class="subtitle" id="subtitle">Яндекс.Директ · 2 кабинета · sk-tu.ru · 22.06–28.06.2026</div>
+            <div class="subtitle" id="subtitle">Яндекс.Директ · 2 кабинета · sk-tu.ru · 20.07–26.07.2026</div>
         </div>
         <div class="period-selector">
-            <button class="period-btn" onclick="showPeriod('w1')">15.06–21.06</button>
-            <button class="period-btn active" onclick="showPeriod('w2')">22.06–28.06</button>
-            <button class="period-btn" onclick="showPeriod('w3')">29.06–05.07</button>
+            <button class="period-btn" onclick="showPeriod('w4')">06.07–12.07</button>
+            <button class="period-btn" onclick="showPeriod('w5')">13.07–19.07</button>
+            <button class="period-btn active" onclick="showPeriod('w6')">20.07–26.07</button>
             <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙 Тёмная</button>
         </div>
     </div>
@@ -292,7 +292,7 @@
     <div class="table-card">
         <h3 id="detailTableTitle">📋 Детализация за период</h3>
         <table id="detailTable"></table>
-        <p style="font-size:11px; color: var(--muted); margin-top: 10px; line-height: 1.5;">⚠ <b>Методика показов.</b> Для <b>w1</b> (15–21.06) показы — реальные данные Яндекс.Директ API (источники <code>source_1_yandex_direct.json</code> и <code>source_2_yandex_direct_msk.json</code>). Для <b>w2</b> и <b>w3</b> показы по кабинетам и РК — <b>оценка</b> по среднему CTR w1 (СПБ 1.17%, МСК 0.88%); формула: <code>imp = clicks × (impressions<sub>w1</sub> / clicks<sub>w1</sub>)</code>. В исходных CSV-выгрузках Яндекс Директа за 22.06–05.07 колонка «Показы» отсутствует (отчёт «По объявлениям/группам»). Для точных значений загрузите отчёт «Стандартный по кампаниям» через кабинет Директа.</p>
+        <p style="font-size:11px; color: var(--muted); margin-top: 10px; line-height: 1.5;">⚠ <b>Методика показов и ЦЛ.</b> <b>W6</b> (20–26.07) — прямой подсчёт из CSV Кабинета Директа (колонка 15): СПБ Мастер 582898 + Ретаргетинг 108050 + МСК Мастер 71392 + МСК Поиск 5778 = <b>768 118 imp</b> (CTR 1.70%). <b>W4–W5</b> (06–19.07) — в исходных CSV-выгрузках стандартного отчёта колонка «Показы» была пустой (формат «По объявлениям/группам»); для точных показов этих недель выгрузите «Стандартный по кампаниям» через Кабинет. Органика (Вебмастер): в общий KPI не входит — отображается отдельно в SEO-блоках по СПБ и МСК. <b>ЦЛ (w6)</b> = 27 — по тегу «Целевой» из отдельной выгрузки amoCRM (5 млн ₽ заявок); stage-only fallback даёт 25, тег первичен.</p>
     </div>
 
     <!-- SEO Блоки -->
@@ -391,358 +391,348 @@
 <script>
 // ===== DATA =====
 const weeks = {
-    w1: {
-        id: 'w1',
-        label: '15.06–21.06',
-        from: '15.06.2026',
-        to: '21.06.2026',
-        impressions: 222824,
-        clicks: 2349,
-        spend: 120365,
-        leads: 79,
-        target: 13,
-        ctr: 1.05,
-        cpc: 51,
-        cpa: 1524,
-        cpl: 9259,
-        convLead: 3.36,
-        convTarget: 0.58,
-        seo: 0,
-        seoLeads: 2,
-        seoTarget: 1,
-        otherLeads: 0,
-        otherTarget: 0,
-        accounts: {
-            'Кабинет СПБ': {
-                imp: 132694,
-                clicks: 1552,
-                spend: 56314.97,
-                leads: 43,
-                target: 1,
-                campaigns: [
-                    { name: 'Каркас. Мастер. СПБ. ОК. gl.', imp: 24194, clicks: 518, spend: 16773.20, leads: 5, target: 0 },
-                    { name: 'Каркас. РСЯ. СПБ. ОК. 06-26.', imp: 79723, clicks: 489, spend: 11867.76, leads: 0, target: 0 },
-                    { name: 'Каркас. Поиск. СПБ. ОК.', imp: 1397, clicks: 218, spend: 22062.00, leads: 1, target: 1 },
-                    { name: 'Копия Каркас. Ретаргетинг. ФИД. СПБ. ОК. 4.', imp: 22551, clicks: 169, spend: 3660.00, leads: 0, target: 0 },
-                    { name: 'Каркас. Мастер. СПБ. CPL. 3.', imp: 4829, clicks: 158, spend: 1952.00, leads: 1, target: 0 }
-                ]
-            },
-            'Кабинет МСК': {
-                imp: 90130,
-                clicks: 797,
-                spend: 64050.00,
-                leads: 25,
-                target: 1,
-                campaigns: [
-                    { name: 'ЕПК. Каркас. РСЯ. МСК. ОК.', imp: 66252, clicks: 236, spend: 12831.84, leads: 1, target: 0 },
-                    { name: 'Каркас. Поиск. МСК.', imp: 4556, clicks: 190, spend: 24085.18, leads: 0, target: 0 },
-                    { name: 'Каркас кат. Мастер. МСК. ОК.', imp: 7251, clicks: 161, spend: 8148.80, leads: 2, target: 0 },
-                    { name: 'Каркас Пл. Мастер. МСК. ОК.', imp: 4464, clicks: 118, spend: 14695.26, leads: 10, target: 1 },
-                    { name: 'Каркас. Ретаргетинг. МСК. ОК. 2.', imp: 3960, clicks: 46, spend: 3658.49, leads: 0, target: 0 },
-                    { name: 'Каркас. Ретаргетинг. Фид. МСК. ОК. 2.', imp: 3647, clicks: 46, spend: 630.43, leads: 0, target: 0 }
-                ]
-            }
-        },
-        channels: [
-            { name: 'Яндекс Директ', leads: 45, target: 2, spend: 120365 },
-            { name: 'Instagram', leads: 2, target: 0, spend: 0 },
-            { name: 'SEO', leads: 2, target: 1, spend: 0 },
-            { name: 'Рекомендация', leads: 1, target: 1, spend: 0 },
-            { name: 'Классифайды', leads: 1, target: 1, spend: 0 },
-            { name: 'Оффлайн', leads: 7, target: 7, spend: 0 },
-            { name: 'Без источника', leads: 21, target: 0, spend: 0 }
-        ],
-        topPages: [],
-        seoStats: {
-            spb: { visits: 3383, users: 2740, pageDepth: 2.8, avgDuration: 145 },
-            msk: { visits: 1578, users: 1278, pageDepth: 2.8, avgDuration: 145 }
-        },
-        topPagesSpb: [
-            { url: "/catalog/karkasnye-doma/", impressions: 10560, clicks: 688 },
-            { url: "/catalog/karkasnye-doma/100-150m2/", impressions: 2939, clicks: 421 },
-            { url: "/catalog/karkasnye-doma/dvuhetazhnye/", impressions: 1537, clicks: 314 },
-            { url: "/catalog/karkasnye-doma/odnoetazhnye/", impressions: 1750, clicks: 267 },
-            { url: "/catalog/karkasnye-doma/s-terrasoj/", impressions: 900, clicks: 190 },
-            { url: "/calculator/", impressions: 897, clicks: 180 },
-            { url: "/", impressions: 2062, clicks: 113 },
-            { url: "/mortgage/", impressions: 668, clicks: 109 },
-            { url: "/catalog/karkasnye-doma/s-mansardoy/", impressions: 344, clicks: 84 },
-            { url: "/catalog/karkasnye-doma/dk-200/", impressions: 149, clicks: 76 }
-        ],
-        topPagesMsk: [
-            { url: "/articles/stroitelstvo/pravila-razmeshcheniya-stroeniy-na-zemelnom-uchastke-v-2026-polnoe-rukovodstvo-dlya-izhs-i-snt/", impressions: 6732, clicks: 449 },
-            { url: "/catalog/karkasnye-doma/odnoetazhnye/", impressions: 11162, clicks: 281 },
-            { url: "/catalog/karkasnye-doma/", impressions: 16360, clicks: 187 },
-            { url: "/", impressions: 4708, clicks: 113 },
-            { url: "/catalog/karkasnye-doma/100-150m2/", impressions: 3095, clicks: 56 },
-            { url: "/catalog/karkasnye-doma/dvuhetazhnye/", impressions: 1043, clicks: 56 },
-            { url: "/calculator/", impressions: 499, clicks: 49 },
-            { url: "/catalog/karkasnye-doma/s-terrasoj/", impressions: 475, clicks: 41 },
-            { url: "/catalog/karkasnye-doma/s-mansardoy/", impressions: 188, clicks: 33 },
-            { url: "/catalog/karkasnye-doma/3-spalni/", impressions: 78, clicks: 26 }
-        ],
-        topQueriesSpb: [
-            { query: 'строительство каркасных домов под ключ', visits: 45 },
-            { query: 'каркасные дома под ключ', visits: 33 },
-            { query: 'купить каркасный дом в спб', visits: 32 },
-            { query: 'каркасный дом с террасой', visits: 27 },
-            { query: 'проекты каркасных домов спб', visits: 25 },
-            { query: 'строительство каркасных домов', visits: 24 },
-            { query: 'каркасный дом 2 этажа', visits: 24 },
-            { query: 'купить каркасный дом под ключ в спб', visits: 23 },
-            { query: 'стоимость каркасного дома', visits: 22 },
-            { query: 'каркасные дома 100 м', visits: 22 }
-        ],
-        topQueriesMsk: [
-            { query: 'теплый угол', visits: 51 },
-            { query: 'строительство каркасных домов', visits: 16 },
-            { query: 'тёплый угол строительство каркасных домов', visits: 14 },
-            { query: 'нормы строительства на земельном участке от соседей 2026', visits: 13 },
-            { query: 'одноэтажный каркасный дом под ключ цена', visits: 11 },
-            { query: 'проекты каркасных домов с мансардой', visits: 11 },
-            { query: 'каркасные дома под ключ проекты и цены', visits: 10 },
-            { query: 'одноэтажный каркасный дом цена', visits: 10 },
-            { query: 'расстояние построек от забора соседа по новым нормам 2026', visits: 10 },
-            { query: 'каркасный дом под ключ', visits: 9 }
-        ]
-    },
-    w2: {
-        id: 'w2',
-        label: '22.06–28.06',
-        from: '22.06.2026',
-        to: '28.06.2026',
-        impressions: 335255,
-        clicks: 3470,
-        spend: 171054.59,
-        leads: 106,
-        target: 21,
-    ctr: 1.12,
-        cpc: 49,
-        cpa: 1614,
-        cpl: 8145,
-        convLead: 3.06,
-        convTarget: 0.61,
+    w4: {
+        id: 'w4',
+        label: '06.07–12.07',
+        from: '06.07.2026',
+        to: '12.07.2026',
+        impressions: 0,
+        clicks: 10029,
+        spend: 219994.51,
+        leads: 85,
+        target: 22,
+        ctr: 0, // impressions unavailable — Direct CSV lacked «Показы» column (see methodology)
+        cpc: 21.94,
+        cpa: 2588,
+        cpl: 9999.75,
+        convLead: 0.85,
+        convTarget: 0.26,
         seo: 0,
         seoLeads: 0,
         seoTarget: 0,
-        otherLeads: 93,
-        otherTarget: 14,
-        webmasterClicks: 5392,
+        otherLeads: 85,
+        otherTarget: 22,
+        webmasterClicks: 2978,
         accounts: {
             'Кабинет МСК': {
-                imp: 165289,
-                clicks: 1398,
-                spend: 110535.40,
-                leads: 8,
-                target: 4,
+                imp: 0,
+                clicks: 1353,
+                spend: 121999.68,
+                leads: 0,
+                target: 0,
                 campaigns: [
-                    { name: 'ЕПК. Каркас. РСЯ. МСК. OK.', imp: 123905, clicks: 418, spend: 21328.24, leads: 0, target: 0 },
-                    { name: 'Каркас Гл. Мастер. МСК. OK.', imp: 5274, clicks: 156, spend: 16732.31, leads: 2, target: 1 },
-                    { name: 'Каркас кат. Мастер. МСК. OK.', imp: 18703, clicks: 437, spend: 36267.26, leads: 2, target: 1 },
-                    { name: 'Каркас. Поиск. МСК.', imp: 7852, clicks: 249, spend: 30747.01, leads: 4, target: 2 },
-                    { name: 'Каркас. Ретаргетинг. МСК. OK. 2.', imp: 4881, clicks: 49, spend: 3842.80, leads: 0, target: 0 },
-                    { name: 'Каркас. Ретаргетирнг. Фид. МСК. OK. 2.', imp: 4674, clicks: 89, spend: 1617.78, leads: 0, target: 0 }
+                    { name: 'ЕПК. Каркас. РСЯ. МСК. OK.', imp: 0, clicks: 385, spend: 17919.59, leads: 0, target: 0 },
+                    { name: 'Каркас Гл. Мастер. МСК. OK.', imp: 0, clicks: 44, spend: 6400.20, leads: 0, target: 0 },
+                    { name: 'Каркас кат. Мастер. МСК. OK.', imp: 0, clicks: 531, spend: 54345.30, leads: 0, target: 0 },
+                    { name: 'Каркас. Поиск. МСК.', imp: 0, clicks: 258, spend: 37127.20, leads: 0, target: 0 },
+                    { name: 'Каркас. Ретаргетинг. МСК. OK. 2.', imp: 0, clicks: 60, spend: 4983.78, leads: 0, target: 0 },
+                    { name: 'Каркас. Ретаргетирнг. Фид. МСК. OK. 2.', imp: 0, clicks: 75, spend: 1223.61, leads: 0, target: 0 }
                 ]
             },
             'Кабинет СПБ': {
-                imp: 144375,
-                clicks: 2072,
-                spend: 60519.19,
-                leads: 5,
-                target: 2,
+                imp: 0,
+                clicks: 8676,
+                spend: 97994.83,
+                leads: 0,
+                target: 0,
                 campaigns: [
-                    { name: 'Каркас. Мастер. СПБ. CPL. 3.', imp: 6166, clicks: 213, spend: 2147.20, leads: 2, target: 0 },
-                    { name: 'Каркас. Мастер. СПБ. OK. gl.', imp: 47024, clicks: 1129, spend: 23159.80, leads: 0, target: 1 },
-                    { name: 'Каркас. Поиск. СПБ. OK.', imp: 1223, clicks: 206, spend: 19358.32, leads: 2, target: 0 },
-                    { name: 'Каркас. РСЯ. СПБ. OK. 06-26.', imp: 71297, clicks: 339, spend: 12193.85, leads: 0, target: 0 },
-                    { name: 'Копия Каркас. Ретаргетинг. ФИД. СПБ. OK. 4.', imp: 18665, clicks: 185, spend: 3660.02, leads: 1, target: 1 }
+                    { name: 'Каркас. Мастер. СПБ. CPL. 3.', imp: 0, clicks: 248, spend: 7320.00, leads: 0, target: 0 },
+                    { name: 'Каркас. Мастер. СПБ. OK. gl.', imp: 0, clicks: 7850, spend: 72433.40, leads: 0, target: 0 },
+                    { name: 'Каркас. Поиск. СПБ. OK.', imp: 0, clicks: 17, spend: 2114.56, leads: 0, target: 0 },
+                    { name: 'Каркас. РСЯ. СПБ. OK. 06-26.', imp: 0, clicks: 102, spend: 3388.85, leads: 0, target: 0 },
+                    { name: 'Копия Каркас. Ретаргетинг. ФИД. СПБ. OK. 4.', imp: 0, clicks: 459, spend: 12738.02, leads: 0, target: 0 }
                 ]
             }
         },
         channels: [
-            { name: 'Яндекс Директ', leads: 16, target: 6, spend: 171054.59 },
-            { name: 'Выставочный дом', leads: 11, target: 11, spend: 0 },
-            { name: 'Instagram', leads: 1, target: 1, spend: 0 },
-            { name: 'Сарафан', leads: 1, target: 1, spend: 0 },
-            { name: 'SEO', leads: 0, target: 0, spend: 0 },
-            { name: 'Без источника', leads: 77, target: 2, spend: 0 }
+            { name: 'Яндекс Директ', leads: 0, target: 0, spend: 219994.51 },
+            { name: 'Выставочный дом', leads: 10, target: 9, spend: 0 },
+            { name: 'Вх. звонок', leads: 38, target: 5, spend: 0 },
+            { name: 'Сайт sk-tu.ru', leads: 3, target: 2, spend: 0 },
+            { name: 'Инстаграм', leads: 1, target: 1, spend: 0 },
+            { name: 'VK', leads: 2, target: 0, spend: 0 },
+            { name: 'Без источника', leads: 29, target: 5, spend: 0 },
+            { name: 'Другое', leads: 2, target: 0, spend: 0 }
         ],
         topPages: [],
         seoStats: {
-            spb: { visits: 2579, users: 2100, pageDepth: 2.8, avgDuration: 145 },
-            msk: { visits: 2813, users: 2300, pageDepth: 3.1, avgDuration: 160 }
+            spb: { visits: 2039, users: 0, pageDepth: 0, avgDuration: 0 },
+            msk: { visits: 939, users: 0, pageDepth: 0, avgDuration: 0 }
         },
         topPagesSpb: [
-            { url: "/catalog/karkasnye-doma/", impressions: 17343, clicks: 998 },
-            { url: "/catalog/karkasnye-doma/100-150m2/", impressions: 2290, clicks: 206 },
-            { url: "/catalog/karkasnye-doma/odnoetazhnye/", impressions: 2328, clicks: 179 },
-            { url: "/catalog/karkasnye-doma/dvuhetazhnye/", impressions: 1696, clicks: 129 },
-            { url: "/calculator/", impressions: 704, clicks: 82 },
-            { url: "/", impressions: 2252, clicks: 80 },
-            { url: "/articles/stroitelstvo/pravila-razmeshcheniya-stroeniy-na-zemelnom-uchastke-v-2026-polnoe-rukovodstvo-dlya-izhs-i-snt/", impressions: 1082, clicks: 66 },
-            { url: "/catalog/karkasnye-doma/s-terrasoj/", impressions: 429, clicks: 54 },
-            { url: "/catalog/karkasnye-doma/s-mansardoy/", impressions: 454, clicks: 48 },
-            { url: "/catalog/karkasnye-doma/pmzh/", impressions: 806, clicks: 39 }
+            { url: "/catalog/karkasnye-doma/", impressions: 18394, clicks: 654 },
+            { url: "/catalog/karkasnye-doma/odnoetazhnye/", impressions: 2290, clicks: 184 },
+            { url: "/catalog/karkasnye-doma/100-150m2/", impressions: 1698, clicks: 148 },
+            { url: "/catalog/karkasnye-doma/dvuhetazhnye/", impressions: 1092, clicks: 96 },
+            { url: "/calculator/", impressions: 762, clicks: 75 },
+            { url: "/", impressions: 2574, clicks: 62 },
+            { url: "/catalog/karkasnye-doma/s-terrasoj/", impressions: 474, clicks: 61 },
+            { url: "/catalog/", impressions: 732, clicks: 56 },
+            { url: "/articles/fundamenty/ustroystvo-uteplennoy-otmostki-polnoe-rukovodstvo-po-montazhu-svoimi-rukami/", impressions: 2101, clicks: 49 },
+            { url: "/catalog/karkasnye-doma/s-mansardoy/", impressions: 529, clicks: 47 }
         ],
         topPagesMsk: [
-            { url: "/catalog/karkasnye-doma/odnoetazhnye/", impressions: 30860, clicks: 765 },
-            { url: "/articles/stroitelstvo/pravila-razmeshcheniya-stroeniy-na-zemelnom-uchastke-v-2026-polnoe-rukovodstvo-dlya-izhs-i-snt/", impressions: 10412, clicks: 509 },
-            { url: "/catalog/karkasnye-doma/", impressions: 22323, clicks: 430 },
-            { url: "/", impressions: 6562, clicks: 161 },
-            { url: "/catalog/karkasnye-doma/dvuhetazhnye/", impressions: 2116, clicks: 142 },
-            { url: "/catalog/karkasnye-doma/100-150m2/", impressions: 4871, clicks: 110 },
-            { url: "/catalog/karkasnye-doma/s-terrasoj/", impressions: 973, clicks: 88 },
-            { url: "/catalog/karkasnye-doma/3-spalni/", impressions: 200, clicks: 69 },
-            { url: "/calculator/", impressions: 874, clicks: 56 },
-            { url: "/catalog/karkasnye-doma/s-mansardoy/", impressions: 422, clicks: 48 }
+            { url: "/articles/stroitelstvo/pravila-razmeshcheniya-stroeniy-na-zemelnom-uchastke-v-2026-polnoe-rukovodstvo-dlya-izhs-i-snt/", impressions: 9294, clicks: 498 },
+            { url: "/", impressions: 4179, clicks: 155 },
+            { url: "/catalog/karkasnye-doma/odnoetazhnye/", impressions: 16708, clicks: 78 },
+            { url: "/catalog/karkasnye-doma/barnkhaus/", impressions: 902, clicks: 34 },
+            { url: "/catalog/karkasnye-doma/", impressions: 4128, clicks: 22 },
+            { url: "/calculator/", impressions: 1312, clicks: 17 },
+            { url: "/catalog/karkasnye-doma/vtoroy-svet/", impressions: 444, clicks: 9 },
+            { url: "/catalog/karkasnye-doma/dvuhetazhnye/", impressions: 2599, clicks: 7 },
+            { url: "/catalog/karkasnye-doma/100-150m2/", impressions: 2319, clicks: 7 },
+            { url: "/catalog/karkasnye-doma/do-100m2/", impressions: 1002, clicks: 6 }
         ],
         topQueriesSpb: [
-            { query: 'теплый угол', visits: 30 },
-            { query: 'купить каркасный дом в спб', visits: 19 },
-            { query: 'теплый угол строительная компания', visits: 17 },
-            { query: 'тёплый угол строительство каркасных домов', visits: 15 },
-            { query: 'тёплый угол строительство каркасных домов в спб', visits: 11 },
-            { query: 'каркасный дом с террасой', visits: 9 },
-            { query: 'каркасный дом под ключ', visits: 7 },
-            { query: 'каркасный дом 2 этажа', visits: 6 },
-            { query: 'sk_tu.ru', visits: 5 },
-            { query: 'купить каркасный дом спб', visits: 5 }
+            { query: 'купить каркасный дом в спб', visits: 38 },
+            { query: 'каркасный дом под ключ в ленинградской области', visits: 28 },
+            { query: 'каркасные дома под ключ', visits: 26 },
+            { query: 'стоимость каркасного дома', visits: 26 },
+            { query: 'каркасные дома под ключ в спб', visits: 25 },
+            { query: 'каркасные дома спб', visits: 25 },
+            { query: 'строительство каркасных домов под ключ', visits: 25 },
+            { query: 'построить каркасный дом в спб', visits: 25 },
+            { query: 'строительство каркасных домов под ключ в спб', visits: 20 },
+            { query: 'каркасный дом с террасой', visits: 20 }
         ],
         topQueriesMsk: [
-            { query: 'теплый угол', visits: 69 },
-            { query: 'пк-193 теплый угол', visits: 36 },
-            { query: 'тёплый угол строительство каркасных домов', visits: 11 },
-            { query: 'нормы строительства на земельном участке от соседей 2026', visits: 10 },
-            { query: 'нормы расположения построек на земельном участке 2026', visits: 7 },
-            { query: 'теплый угол строительная компания', visits: 7 },
+            { query: 'теплый угол', visits: 62 },
+            { query: 'каркасный дом барнхаус', visits: 20 },
+            { query: 'каркасный одноэтажный дом', visits: 17 },
+            { query: 'одноэтажный каркасный дом', visits: 15 },
+            { query: 'строительство домов', visits: 12 },
+            { query: 'проекты одноэтажных каркасных домов', visits: 10 },
+            { query: 'нормы строительства на земельном участке от соседей 2026', visits: 7 },
+            { query: 'строительство домов в москве и области', visits: 7 },
             { query: 'тёплый угол', visits: 6 },
-            { query: 'нормы строительства в снт 2026', visits: 4 },
-            { query: 'нормы отступа от границ участка при строительстве дома ижс 2026', visits: 3 },
-            { query: 'проектирование каркасных домов', visits: 3 }
-        ],
-        topQueries: []
+            { query: 'каркасный барнхаус под ключ', visits: 5 }
+        ]
     },
-    w3: {
-        id: 'w3',
-        label: '29.06–05.07',
-        from: '29.06.2026',
-        to: '05.07.2026',
-        impressions: 461675,
-        clicks: 4910,
-        spend: 199955.47,
-        leads: 125,
-        target: 35,
-        ctr: 1.06,
-        cpc: 40.72,
-        cpa: 1600,
-        cpl: 5713,
-        convLead: 2.55,
-        convTarget: 0.71,
+    w5: {
+        id: 'w5',
+        label: '13.07–19.07',
+        from: '13.07.2026',
+        to: '19.07.2026',
+        impressions: 0,
+        clicks: 9555,
+        spend: 235321.42,
+        leads: 30,
+        target: 30,
+        ctr: 0, // impressions unavailable — Direct CSV lacked «Показы» column
+        cpc: 24.63,
+        cpa: 7844.05,
+        cpl: 7844.05,
+        convLead: 0.31,
+        convTarget: 100,
         seo: 0,
-        seoLeads: 3,
-        seoTarget: 1,
-        otherLeads: 107,
+        seoLeads: 0,
+        seoTarget: 0,
+        otherLeads: 30,
         otherTarget: 30,
-        webmasterClicks: 3791,
+        webmasterClicks: 4793,
         accounts: {
             'Кабинет МСК': {
-                imp: 278937,
-                clicks: 1517,
-                spend: 122000.00,
-                leads: 7,
+                imp: 0,
+                clicks: 1320,
+                spend: 113321.35,
+                leads: 0,
+                target: 1,
+                campaigns: [
+                    { name: 'Каркас кат. Мастер. МСК. OK.', imp: 0, clicks: 1128, spend: 102315.99, leads: 0, target: 1 },
+                    { name: 'Каркас. Поиск. МСК.', imp: 0, clicks: 192, spend: 11005.36, leads: 0, target: 0 }
+                ]
+            },
+            'Кабинет СПБ': {
+                imp: 0,
+                clicks: 8235,
+                spend: 122000.07,
+                leads: 0,
                 target: 3,
                 campaigns: [
-                    { name: 'Каркас кат. Мастер. МСК. OK.', imp: 16023, clicks: 608, spend: 61713.36, leads: 7, target: 3 },
-                    { name: 'ЕПК. Каркас. РСЯ. МСК. OK.', imp: 252605, clicks: 679, spend: 33118.25, leads: 0, target: 0 },
-                    { name: 'Каркас Гл. Мастер. МСК. OK.', imp: 1943, clicks: 97, spend: 15796.45, leads: 0, target: 0 },
-                    { name: 'Каркас. Поиск. МСК.', imp: 2649, clicks: 76, spend: 8103.23, leads: 0, target: 0 },
-                    { name: 'Каркас. Ретаргетинг. МСК. OK. 2.', imp: 4823, clicks: 42, spend: 3142.59, leads: 0, target: 0 },
-                    { name: 'Каркас. Ретаргетирнг. Фид. МСК. OK. 2.', imp: 894, clicks: 15, spend: 126.12, leads: 0, target: 0 }
-                ]
-            },
-            'Кабинет СПБ': {
-                imp: 227771,
-                clicks: 3393,
-                spend: 77955.47,
-                leads: 11,
-                target: 2,
-                campaigns: [
-                    { name: 'Каркас. Мастер. СПБ. OK. gl.', imp: 79742, clicks: 2286, spend: 36811.28, leads: 6, target: 2 },
-                    { name: 'Каркас. Поиск. СПБ. OK.', imp: 1252, clicks: 198, spend: 19194.71, leads: 2, target: 0 },
-                    { name: 'Каркас. РСЯ. СПБ. OK. 06-26.', imp: 112439, clicks: 393, spend: 12070.26, leads: 0, target: 0 },
-                    { name: 'Каркас. Мастер. СПБ. CPL. 3.', imp: 11210, clicks: 331, spend: 6234.20, leads: 3, target: 0 },
-                    { name: 'Копия Каркас. Ретаргетинг. ФИД. СПБ. OK. 4.', imp: 23128, clicks: 185, spend: 3645.02, leads: 0, target: 0 }
+                    { name: 'Каркас. Мастер. СПБ. OK. gl.', imp: 0, clicks: 7523, spend: 100012.83, leads: 0, target: 2 },
+                    { name: 'Копия Каркас. Ретаргетинг. ФИД. СПБ. OK. 4.', imp: 0, clicks: 712, spend: 21987.24, leads: 0, target: 1 }
                 ]
             }
         },
         channels: [
-            { name: 'Яндекс Директ', leads: 18, target: 5, spend: 91921.7 },
-            { name: 'Выставочный дом', leads: 21, target: 18, spend: 0 },
-            { name: 'Входящие звонки', leads: 43, target: 3, spend: 0 },
-            { name: 'Прямые заходы', leads: 19, target: 3, spend: 0 },
-            { name: 'Instagram', leads: 6, target: 3, spend: 0 },
-            { name: 'Сайт', leads: 2, target: 2, spend: 0 },
-            { name: 'SEO', leads: 3, target: 1, spend: 0 },
-            { name: 'VK', leads: 3, target: 0, spend: 0 },
-            { name: 'Без источника', leads: 10, target: 0, spend: 0 }
+            { name: 'Яндекс Директ', leads: 5, target: 5, spend: 235321.42 },
+            { name: 'Выставочный дом', leads: 11, target: 11, spend: 0 },
+            { name: 'Вх. звонок', leads: 4, target: 4, spend: 0 },
+            { name: 'Instagram', leads: 3, target: 3, spend: 0 },
+            { name: 'Сарафан', leads: 2, target: 2, spend: 0 },
+            { name: 'Сайт sk-tu.ru', leads: 2, target: 2, spend: 0 },
+            { name: 'Почта', leads: 1, target: 1, spend: 0 },
+            { name: 'ДомКлик', leads: 1, target: 1, spend: 0 },
+            { name: 'Без источника', leads: 1, target: 1, spend: 0 }
         ],
         topPages: [],
         seoStats: {
-            spb: { visits: 1441, users: 1150, pageDepth: 2.8, avgDuration: 150 },
-            msk: { visits: 2350, users: 1880, pageDepth: 3.0, avgDuration: 160 }
+            spb: { visits: 5909, users: 0, pageDepth: 0, avgDuration: 0 },
+            msk: { visits: 4793, users: 0, pageDepth: 0, avgDuration: 0 }
         },
         topPagesSpb: [
-            { url: "/catalog/karkasnye-doma/", impressions: 19311, clicks: 426 },
-            { url: "/catalog/karkasnye-doma/odnoetazhnye/", impressions: 1886, clicks: 95 },
-            { url: "/catalog/karkasnye-doma/100-150m2/", impressions: 1933, clicks: 86 },
-            { url: "/", impressions: 1876, clicks: 64 },
-            { url: "/catalog/karkasnye-doma/dvuhetazhnye/", impressions: 1329, clicks: 64 },
-            { url: "/articles/stroitelstvo/pravila-razmeshcheniya-stroeniy-na-zemelnom-uchastke-v-2026-polnoe-rukovodstvo-dlya-izhs-i-snt/", impressions: 784, clicks: 41 },
-            { url: "/calculator/", impressions: 677, clicks: 37 },
-            { url: "/catalog/karkasnye-doma/s-mansardoy/", impressions: 504, clicks: 34 },
-            { url: "/catalog/karkasnye-doma/s-terrasoj/", impressions: 414, clicks: 39 },
-            { url: "/articles/fundamenty/ustroystvo-uteplennoy-otmostki-polnoe-rukovodstvo-po-montazhu-svoimi-rukami/", impressions: 1259, clicks: 25 }
+            { url: "/catalog/karkasnye-doma/", impressions: 31173, clicks: 3396 },
+            { url: "/catalog/karkasnye-doma/odnoetazhnye/", impressions: 3161, clicks: 449 },
+            { url: "/catalog/karkasnye-doma/100-150m2/", impressions: 1551, clicks: 242 },
+            { url: "/catalog/karkasnye-doma/dvuhetazhnye/", impressions: 1628, clicks: 189 },
+            { url: "/calculator/", impressions: 1472, clicks: 172 },
+            { url: "/catalog/karkasnye-doma/s-terrasoj/", impressions: 628, clicks: 143 },
+            { url: "/articles/stroitelstvo/pravila-razmeshcheniya-stroeniy-na-zemelnom-uchastke-v-2026-polnoe-rukovodstvo-dlya-izhs-i-snt/", impressions: 1950, clicks: 116 },
+            { url: "/catalog/", impressions: 663, clicks: 77 },
+            { url: "/articles/fundamenty/ustroystvo-uteplennoy-otmostki-polnoe-rukovodstvo-po-montazhu-svoimi-rukami/", impressions: 2362, clicks: 73 },
+            { url: "/catalog/karkasnye-doma/pmzh/", impressions: 494, clicks: 73 }
         ],
         topPagesMsk: [
-            { url: "/catalog/karkasnye-doma/odnoetazhnye/", impressions: 43738, clicks: 600 },
-            { url: "/articles/stroitelstvo/pravila-razmeshcheniya-stroeniy-na-zemelnom-uchastke-v-2026-polnoe-rukovodstvo-dlya-izhs-i-snt/", impressions: 7801, clicks: 378 },
-            { url: "/catalog/karkasnye-doma/", impressions: 16256, clicks: 250 },
-            { url: "/", impressions: 5403, clicks: 143 },
-            { url: "/catalog/karkasnye-doma/100-150m2/", impressions: 6229, clicks: 117 },
-            { url: "/catalog/karkasnye-doma/dvuhetazhnye/", impressions: 2593, clicks: 111 },
-            { url: "/catalog/karkasnye-doma/s-terrasoj/", impressions: 991, clicks: 104 },
-            { url: "/calculator/", impressions: 1457, clicks: 93 },
-            { url: "/catalog/karkasnye-doma/s-mansardoy/", impressions: 473, clicks: 50 },
-            { url: "/catalog/karkasnye-doma/barnkhaus/", impressions: 1198, clicks: 43 }
+            { url: "/catalog/karkasnye-doma/odnoetazhnye/", impressions: 30619, clicks: 1462 },
+            { url: "/catalog/karkasnye-doma/", impressions: 23369, clicks: 896 },
+            { url: "/articles/stroitelstvo/pravila-razmeshcheniya-stroeniy-na-zemelnom-uchastke-v-2026-polnoe-rukovodstvo-dlya-izhs-i-snt/", impressions: 11966, clicks: 599 },
+            { url: "/catalog/karkasnye-doma/100-150m2/", impressions: 2061, clicks: 282 },
+            { url: "/catalog/karkasnye-doma/dvuhetazhnye/", impressions: 3690, clicks: 218 },
+            { url: "/catalog/", impressions: 702, clicks: 186 },
+            { url: "/catalog/karkasnye-doma/3-spalni/", impressions: 243, clicks: 146 },
+            { url: "/", impressions: 2817, clicks: 142 },
+            { url: "/catalog/karkasnye-doma/barnkhaus/", impressions: 1307, clicks: 135 },
+            { url: "/catalog/karkasnye-doma/s-terrasoj/", impressions: 836, clicks: 100 }
         ],
         topQueriesSpb: [
-            { query: 'каркасные дома под ключ', visits: 29 },
-            { query: 'купить каркасный дом в спб', visits: 29 },
-            { query: 'каркасный дом под ключ', visits: 18 },
-            { query: 'построить каркасный дом в спб', visits: 18 },
-            { query: 'каркасные дома', visits: 17 },
-            { query: 'строительство каркасных домов под ключ', visits: 16 },
-            { query: 'каркасный дом под ключ в спб цена', visits: 13 },
-            { query: 'теплый угол', visits: 13 },
-            { query: 'каркасные дома под ключ проекты', visits: 13 },
-            { query: 'каркасный дом с террасой', visits: 13 }
+            { query: 'каркасные дома', visits: 373 },
+            { query: 'каркасные дома под ключ', visits: 300 },
+            { query: 'каркасные дома под ключ в спб', visits: 226 },
+            { query: 'каркасный дом под ключ', visits: 212 },
+            { query: 'строительство каркасных домов', visits: 171 },
+            { query: 'строительство каркасных домов под ключ', visits: 156 },
+            { query: 'строительство каркасных домов в спб', visits: 135 },
+            { query: 'каркасные дома спб', visits: 127 },
+            { query: 'проекты каркасных домов', visits: 100 },
+            { query: 'каркасные дома в спб', visits: 99 }
         ],
         topQueriesMsk: [
-            { query: 'каркасные дома под ключ', visits: 80 },
-            { query: 'теплый угол', visits: 73 },
-            { query: 'каркасные дома', visits: 72 },
-            { query: 'каркасные дома москва', visits: 51 },
-            { query: 'каркасные дома недорого', visits: 47 },
-            { query: 'строительство каркасных домов под ключ', visits: 31 },
-            { query: 'каркасные дома с террасой', visits: 29 },
-            { query: 'одноэтажный каркасный дом', visits: 22 },
-            { query: 'проекты каркасных домов с террасой', visits: 22 },
-            { query: 'каркасные дома под ключ проекты и цены', visits: 18 }
+            { query: 'каркасные дома', visits: 422 },
+            { query: 'каркасные дома под ключ', visits: 277 },
+            { query: 'каркасные дома теплый угол', visits: 99 },
+            { query: 'каркасный дом барнхаус', visits: 95 },
+            { query: 'одноэтажный каркасный дом', visits: 81 },
+            { query: 'проекты одноэтажных каркасных домов', visits: 79 },
+            { query: 'строительство каркасных домов', visits: 72 },
+            { query: 'каркасный дом под ключ москва', visits: 59 },
+            { query: 'каркасный одноэтажный дом', visits: 59 },
+            { query: 'каркасный дом под ключ цена', visits: 51 }
+        ]
+    },
+    w6: {
+        id: 'w6',
+        label: '20.07–26.07',
+        from: '20.07.2026',
+        to: '26.07.2026',
+        impressions: 768118, // Direct total: МСК 77170 + СПБ 690948 (CSV col 15)
+        clicks: 13078,
+        spend: 231987.37,
+        leads: 113,
+        target: 27,
+        ctr: 1.70, // 13078/768118*100
+        cpc: 17.74,
+        cpa: 2053,
+        cpl: 8592.12,
+        convLead: 0.86,
+        convTarget: 23.89,
+        seo: 0,
+        seoLeads: 0,
+        seoTarget: 0,
+        otherLeads: 113,
+        otherTarget: 27,
+        webmasterClicks: 5765,
+        accounts: {
+            'Кабинет МСК': {
+                imp: 77170, // 71392 (Мастер) + 5778 (Поиск)
+                clicks: 1929,
+                spend: 109987.37,
+                leads: 0,
+                target: 0,
+                weighted_imp: 69368.61,
+                weighted_ctr: 2.78,
+                campaigns: [
+                    { name: 'Каркас кат. Мастер. МСК. OK.', imp: 71392, clicks: 1814, spend: 109987.29, leads: 0, target: 0 },
+                    { name: 'Каркас. Поиск. МСК.', imp: 5778, clicks: 115, spend: 0.0, leads: 0, target: 0 }
+                ]
+            },
+            'Кабинет СПБ': {
+                imp: 690948, // 582898 (Мастер) + 108050 (Ретаргетинг)
+                clicks: 11149,
+                spend: 122000.00,
+                leads: 0,
+                target: 2,
+                campaigns: [
+                    { name: 'Каркас. Мастер. СПБ. OK. gl.', imp: 582898, clicks: 10468, spend: 100478.73, leads: 2, target: 2 },
+                    { name: 'Копия Каркас. Ретаргетинг. ФИД. СПБ. OK. 4.', imp: 108050, clicks: 681, spend: 21521.26, leads: 0, target: 0 }
+                ]
+            }
+        },
+        channels: [
+            { name: 'Яндекс Директ', leads: 2, target: 2, spend: 231987.37 },
+            { name: 'Выставочный дом', leads: 10, target: 10, spend: 0 },
+            { name: 'Инстаграм', leads: 7, target: 7, spend: 0 },
+            { name: 'Вх. звонок', leads: 7, target: 7, spend: 0 },
+            { name: 'Сайт sk-tu.ru', leads: 1, target: 1, spend: 0 },
+            { name: 'Другое', leads: 0, target: 0, spend: 0 }
+        ],
+        topPages: [],
+        seoStats: {
+            spb: { visits: 5765, users: 0, pageDepth: 0, avgDuration: 0 },
+            msk: { visits: 4961, users: 0, pageDepth: 0, avgDuration: 0 }
+        },
+        topPagesSpb: [
+            { url: "/catalog/karkasnye-doma/", impressions: 21394, clicks: 3384 },
+            { url: "/catalog/karkasnye-doma/odnoetazhnye/", impressions: 2710, clicks: 466 },
+            { url: "/catalog/karkasnye-doma/100-150m2/", impressions: 1505, clicks: 286 },
+            { url: "/", impressions: 2979, clicks: 162 },
+            { url: "/articles/stroitelstvo/pravila-razmeshcheniya-stroeniy-na-zemelnom-uchastke-v-2026-polnoe-rukovodstvo-dlya-izhs-i-snt/", impressions: 2519, clicks: 96 },
+            { url: "/articles/fundamenty/ustroystvo-uteplennoy-otmostki-polnoe-rukovodstvo-po-montazhu-svoimi-rukami/", impressions: 2504, clicks: 61 },
+            { url: "/catalog/karkasnye-doma/barnkhaus/", impressions: 2263, clicks: 43 },
+            { url: "/calculator/", impressions: 1346, clicks: 142 },
+            { url: "/articles/osobennosti-i-sovety/kak-vyrovnyat-uchastok-na-dache-i-chto-dlya-etogo-mozhno-ispolzovat/", impressions: 1268, clicks: 18 },
+            { url: "/catalog/karkasnye-doma/dvuhetazhnye/", impressions: 1187, clicks: 151 }
+        ],
+        topPagesMsk: [
+            { url: "/catalog/karkasnye-doma/odnoetazhnye/", impressions: 31338, clicks: 2039 },
+            { url: "/catalog/karkasnye-doma/", impressions: 21123, clicks: 862 },
+            { url: "/articles/stroitelstvo/pravila-razmeshcheniya-stroeniy-na-zemelnom-uchastke-v-2026-polnoe-rukovodstvo-dlya-izhs-i-snt/", impressions: 7664, clicks: 321 },
+            { url: "/catalog/karkasnye-doma/dvuhetazhnye/", impressions: 3022, clicks: 151 },
+            { url: "/", impressions: 2983, clicks: 145 },
+            { url: "/catalog/karkasnye-doma/100-150m2/", impressions: 2190, clicks: 341 },
+            { url: "/catalog/karkasnye-doma/barnkhaus/", impressions: 1690, clicks: 175 },
+            { url: "/calculator/", impressions: 1127, clicks: 107 },
+            { url: "/mortgage/", impressions: 1042, clicks: 15 },
+            { url: "/catalog/karkasnye-doma/do-100m2/", impressions: 1029, clicks: 49 }
+        ],
+        topQueriesSpb: [
+            { query: 'каркасные дома', visits: 269 },
+            { query: 'каркасные дома под ключ в спб', visits: 210 },
+            { query: 'каркасный дом под ключ', visits: 204 },
+            { query: 'каркасные дома под ключ', visits: 267 },
+            { query: 'строительство каркасных домов в спб', visits: 138 },
+            { query: 'каркасные дома спб', visits: 131 },
+            { query: 'купить каркасный дом в спб', visits: 118 },
+            { query: 'строительство каркасных домов', visits: 152 },
+            { query: 'строительство каркасных домов под ключ', visits: 204 },
+            { query: 'каркасные дома в спб', visits: 120 }
+        ],
+        topQueriesMsk: [
+            { query: 'каркасные дома под ключ', visits: 474 },
+            { query: 'каркасные дома', visits: 460 },
+            { query: 'строительство каркасных домов', visits: 117 },
+            { query: 'строительство каркасных домов под ключ', visits: 91 },
+            { query: 'купить каркасный дом под ключ', visits: 103 },
+            { query: 'каркасный дом под ключ цена', visits: 76 },
+            { query: 'купить каркасный дом', visits: 67 },
+            { query: 'каркасный дом под ключ цена московская область', visits: 31 },
+            { query: 'каркасный дом цена под ключ московская область', visits: 12 },
+            { query: 'каркасный дом под ключ', visits: 3 }
         ]
     }
+
 };
 
-let currentWeek = 'w2';
+let currentWeek = 'w6';
 
 // ===== HELPERS =====
 function fmt(n) {
@@ -978,7 +968,7 @@ function renderDetailTable(w) {
     const totalLeads = w.leads;
     const totalTarget = w.target;
 
-    const avgCtr = totalClicks / totalImp * 100;
+    const avgCtr = totalImp > 0 ? totalClicks / totalImp * 100 : 0;
     const avgCpc = totalSpend / totalClicks;
     const avgCpa = totalLeads > 0 ? totalSpend / totalLeads : null;
     const avgCpl = totalTarget > 0 ? totalSpend / totalTarget : null;
